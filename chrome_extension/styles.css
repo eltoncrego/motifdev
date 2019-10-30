@@ -1,0 +1,33 @@
+@font-face {
+    font-family: "ProximaNova";
+    src: url("fonts/ProximaNova-Regular.otf") format("opentype")
+}
+body {
+    min-width: 200px;
+    font-family: 'ProximaNova'
+}
+h1 {
+    display: flex;
+}
+.header-container {
+    display: flex;
+    margin: 0 auto;
+}
+.outer-lb {
+    display: flex;
+    margin: 0 auto;
+}
+.inner-lb {
+    background-color: #1db954;
+    padding: 8px;
+    border-radius: 8px;
+    margin: 0 auto;
+    color: #fff;
+    transition: all 0.5s ease;
+}
+.inner-lb:hover{ 
+    background-color: gray;
+    opacity: 0.5;
+    padding: 10px;
+    cursor: pointer;
+}
