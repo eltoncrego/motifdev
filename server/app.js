@@ -7,7 +7,7 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var songsRouter = require('./routes/songs');
 
-var db = require('./controllers/db');
+var db = require('./controllers/mongo');
 
 var app = express();
 
