@@ -18,6 +18,7 @@ async function changeSpotify() {
           setTimeout(function() {
             spotifySVG[0].parentElement.innerHTML = response;
             setTimeout(function() {
+              spotifySVG = document.getElementsByClassName("spotify-logo--text");
               spotifySVG[0].style.opacity = 1;
             }, 300);
           }, 500);
