@@ -25,5 +25,6 @@
 
   "permissions": [
     "activeTab"
-  ]
+  ],
+  "web_accessible_resources": ["assets/img/main-logo.svg"]
 }

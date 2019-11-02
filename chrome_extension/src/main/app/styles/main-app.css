@@ -6,3 +6,7 @@
 h1 {
   font-family: 'ProximaNova-Bold';
 }
+
+.spotify-logo--text {
+  transition: opacity 500ms ease-in-out;
+}
