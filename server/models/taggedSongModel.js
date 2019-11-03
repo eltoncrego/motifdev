@@ -2,9 +2,9 @@
 var mongoose = require('mongoose');
  
 const taggedSongSchema = new mongoose.Schema({
-  	user: String,
+  	userId: String,
 	songId: String,
-  	tags: [String]
+  	tagIds: [String]
 });
 
 module.exports = mongoose.model('taggedSong', taggedSongSchema);
