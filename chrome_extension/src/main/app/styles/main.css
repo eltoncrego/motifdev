@@ -1,6 +1,6 @@
 @font-face {
   font-family: "ProximaNova-Bold";
-  src: url("../../../../assets/fonts/ProximaNova-Bold.otf") format("opentype");
+  src: url("../../../assets/fonts/ProximaNova-Bold.otf") format("opentype");
 }
 
 h1 {
