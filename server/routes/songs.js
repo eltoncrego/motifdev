@@ -21,7 +21,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/tag/add', function(req, res, next) {
-	if (req.body.songId && req.body.tag && req.body.userId) {
+	if (req.body.songId && req.body.tag && req.body.userId && req.body.songName && req.body.artist) {
 		Tag.find({ 
 				userId: req.body.userId,
 				tag: req.body.tag
@@ -32,13 +32,14 @@ router.post('/tag/add', function(req, res, next) {
 					tag: req.body.tag
 				}],
 				function(err, tagVal) {
-					console.log(tagVal[0]);
 					Song.findOneAndUpdate({
 						userId : req.body.userId,
 						songId : req.body.songId
 					},
 			   		{
-			   		 $push: { tagIds: tagVal[0]._id } 
+			   			$push: { tagIds: tagVal[0]._id },
+						artist : req.body.artist,
+						songName : req.body.songName
 			   		},
 					{
 						new: true, upsert: true
@@ -58,7 +59,9 @@ router.post('/tag/add', function(req, res, next) {
 					songId : req.body.songId
 				},
 		   		{
-		   		 $push: { tagIds: tag[0]._id } 
+		   		 	$push: { tagIds: tag[0]._id },
+		   		 	artist : req.body.artist,
+					songName : req.body.songName 
 		   		},
 				{
 					new: true, upsert: true
@@ -134,7 +137,9 @@ router.post('/tags', function(req, res, next) {
 					resolvedMap[song.songId] = {"tags": []};
 					for(var j = 0; j < song.tagIds.length; j++) {
 						await Tag.findById(song.tagIds[j], function(err, tag) {
-							resolvedMap[song.songId].tags.push(tag.tag);
+							if (tag && !resolvedMap[song.songId].tags.includes(tag.tag)) {
+								resolvedMap[song.songId].tags.push(tag.tag);
+							}
 						});
  					}
 				}
@@ -149,6 +154,7 @@ router.post('/tags', function(req, res, next) {
 router.post('/search', async function(req, res, next) {
 	if (req.body.query && req.body.userId) {
 		var resolvedList = [];
+		var resolvedMap = {};
 		var query = req.body.query;
 		for(var i = 0;i < query.length; i++) {
 			await Tag.find({ 
@@ -157,7 +163,7 @@ router.post('/search', async function(req, res, next) {
 			}).then(async function(tags) {
 				if (tags.length == 0) {
 					return res.status(500).send({
-						"message":"Couldn't find songs: " + req.body.songIds,
+						"message":"Couldn't find tags: " + req.body.query[i],
 						"status":"FAILURE"
 					});
 				} else {
@@ -177,13 +183,14 @@ router.post('/search', async function(req, res, next) {
 						for (var j = 0; j < songs.length; j++) {
 							if (!resolvedList.includes(songs[j].songId)) {
 								resolvedList.push(songs[j].songId);
+								resolvedMap[songs[j].songId] = songs[j];
 							}
 						}
 					});
 				}
 			});
 		}
-		return res.status(200).send(resolvedList);
+		return res.status(200).send(resolvedMap);
 	} else {
 		return res.status(500).send("There was a problem searching. Not all required fields present");
 	}

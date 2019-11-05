@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
  
-mongoose.connect('mongodb://localhost:27017/MotifTest', {
+mongoose.connect('mongodb://localhost:27017/MotifTestDB', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false

@@ -6,16 +6,20 @@ router.use(bodyParser.json());
 var Tag = require('./../models/tagModel');
 
 /* GET all tag for testing. */
-router.get('/', function(req, res, next) {
-	Tag.find({}, function(err, tags) {
-	    var tagMap = {};
+router.post('/', function(req, res, next) {
+	if (req.body.userId) {
+		Tag.find({userId: req.body.userId}, function(err, tags) {
+		    var tagMap = {};
 
-	    tags.forEach(function(tag) {
-	      tagMap[tag._id] = tag;
-	    });
+		    tags.forEach(function(tag) {
+		      tagMap[tag._id] = tag;
+		    });
 
-	    res.status(200).send(tagMap);  
-	});
+		    res.status(200).send(tagMap);  
+		});
+	} else {
+		res.status(500).send({"status":"FAILURE", "message":"All required data not provided"});
+	}
 });
 
 

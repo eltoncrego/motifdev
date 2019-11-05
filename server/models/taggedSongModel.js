@@ -4,6 +4,8 @@ var mongoose = require('mongoose');
 const taggedSongSchema = new mongoose.Schema({
   	userId: String,
 	songId: String,
+	songName: String,
+	artist: String,
   	tagIds: [String]
 });
 
