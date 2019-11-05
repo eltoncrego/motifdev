@@ -42,7 +42,7 @@ class App {
     updateLogo() {
         setTimeout(function (resolve) {
             console.log("Motif for Spotify is running!");
-            var ourSVGURL = chrome.extension.getURL("main-logo.svg");
+            var ourSVGURL = chrome.extension.getURL("assets/img/main-logo.svg");
             $.get(ourSVGURL, function(response) {
             var spotifySVG = document.getElementsByClassName("spotify-logo--text");
             if (spotifySVG && spotifySVG[0] && spotifySVG[0].parentElement) {
