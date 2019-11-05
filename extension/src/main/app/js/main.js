@@ -1,7 +1,8 @@
 import $ from '../../../lib/jquery-min';
+import  AccessorProvider from './ui_selection/accessor_provider';
 import SPOTIFY_ACTIONS from './helpers';
 
-class App {
+class Main {
   run() {
     this.changeSpotify();
     return true;
@@ -17,22 +18,24 @@ class App {
     // some element we are looking for that is guaranteed to be there eventually
 
     // eslint-disable-next-line no-unused-vars
-    this.sleep(3000).then((_r) => {
-      $('.tracklist').children().after("<button id='test'/>");
-      $('button#test').html('Get Info').on('click', () => {
-        const body = {
-          action: SPOTIFY_ACTIONS.ADD_PLAYLIST,
-          playlistInfo: {
-            name: 'My MANNN',
-            tracks: [],
-            isPublic: true,
-            isCollaborative: false,
-          },
-        };
+    this.sleep(3000).then(r =>  {
+        var accessors = new AccessorProvider().getAccessors();
+        // Apply all accessors on startup
+        accessors.forEach(a => a.build()()) // change this cause iz weird
+        // $(".tracklist").children().after("<button id='test'/>");
+        // $("button#test").html("Get Info").on("click", () => {
+        //     var body = {
+        //         action : SPOTIFY_ACTIONS.ADD_PLAYLIST,
+        //         playlistInfo : {
+        //             name : "My MANNN",
+        //             tracks : [],
+        //             isPublic : true,
+        //             isCollaborative : false
+        //         }
+        //     }
 
-        // eslint-disable-next-line no-undef
-        chrome.runtime.sendMessage(body, (resp) => `Playlist created ${resp.uri}`);
-      });
+        //     chrome.runtime.sendMessage(body, resp => alert(`Playlist created ${resp.uri}`));
+        // })
     });
     this.updateLogo();
   }
@@ -57,4 +60,5 @@ class App {
   }, 3000);
 }
 
-export default App;
+
+export default Main;

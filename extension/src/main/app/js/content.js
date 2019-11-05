@@ -1,5 +1,5 @@
 import 'babel-polyfill';
 import '../styles/main.css';
-import App from './main';
+import Main from './main';
 
-new App().run();
+new Main().start();
