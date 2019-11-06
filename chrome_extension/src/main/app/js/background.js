@@ -1,4 +1,6 @@
+import 'babel-polyfill';
 import SPOTIFY_ACTIONS from './helpers';
+
 
 // eslint-disable-next-line no-undef
 const redirectUri = chrome.identity.getRedirectURL('oauth2');
