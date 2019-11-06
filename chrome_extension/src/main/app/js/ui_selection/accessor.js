@@ -1,12 +1,12 @@
-class Accessor { 
-    constructor(selector, modifier) {
-        this.selector = selector;
-        this.modifier = modifier;
-    }
+class Accessor {
+  constructor(selector, modifier) {
+    this.selector = selector;
+    this.modifier = modifier;
+  }
 
-    build() {
-        return () => this.modifier.modify(this.selector.apply());
-    }
+  build() {
+    return () => this.modifier.modify(this.selector.apply());
+  }
 }
 
 export default Accessor;

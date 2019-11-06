@@ -69,7 +69,7 @@ async function api(url, options = {}) {
   if (data.error) {
     if (data.error.status === 401) {
       authorize();
-      return api(url, options); // todo add retries?
+      return api(url, options); // todo add retries... would this ever infinite loop?
     }
 
     return null;
