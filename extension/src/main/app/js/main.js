@@ -60,5 +60,4 @@ class Main {
   }, 3000);
 }
 
-
 export default Main;

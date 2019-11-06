@@ -54,30 +54,27 @@ const getToken = () => new Promise((resolve, reject) => { // TODO handle reject
   });
 });
 
-async function api(url, options = {}) {
-  const accessToken = await getToken();
+const api = (url, options = {}) => new Promise((resolve, reject) => {
+  getToken().then((token) => {
+    // eslint-disable-next-line no-param-reassign
+    options.headers = {
+      ...options.headers,
+      Authorization: `Bearer ${token}`,
+    };
 
-  // eslint-disable-next-line no-param-reassign
-  options.headers = {
-    ...options.headers,
-    Authorization: `Bearer ${accessToken}`,
-  };
-
-  const response = await fetch(`https://api.spotify.com/v1${url}`, options);
-  const data = await response.json();
-
-  if (data.error) {
-    if (data.error.status === 401) {
-      authorize();
-      return api(url, options); // todo add retries... would this ever infinite loop?
-    }
-
-    return null;
-  }
-
-  return data;
-  // TODO return promise
-}
+    fetch(`https://api.spotify.com/v1${url}`, options)
+      .then((response) => response.json().then((data) => {
+        if (data.error) {
+          if (data.error.status === 401) {
+            authorize();
+            return api(url, options); // todo add retries... would this ever infinite loop?
+          }
+          return reject(data);
+        }
+        return resolve(data);
+      }));
+  });
+});
 
 async function handleAddPlaylist(playlistInfo, callback) {
   const body = {
