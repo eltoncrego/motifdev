@@ -1,0 +1,12 @@
+@font-face {
+  font-family: "ProximaNova-Bold";
+  src: url("../../../../assets/fonts/ProximaNova-Bold.otf") format("opentype");
+}
+
+h1 {
+  font-family: 'ProximaNova-Bold';
+}
+
+.spotify-logo--text {
+  transition: opacity 500ms ease-in-out;
+}
