@@ -3,3 +3,7 @@ build/*
 
 # ignore 3rd party min files
 src/lib/*.js
+
+# ignore webpack... maybe revisit this one in the future but right now it's complaining
+# about moving things out of dev dependencies and I'm not sure if that's necessary
+webpack.js
