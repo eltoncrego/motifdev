@@ -34,8 +34,16 @@ const config = {
     new CopyPlugin([
       {
         from: 'src/assets',
-        to: 'assets',
+        to: 'assets'
       },
+      {
+        from: 'src/main/app/templates',
+        to: 'templates'
+      },
+      {
+        from: 'src/main/app/styles',
+        to: 'styles'
+      }
     ]),
     new WebpackExtensionManifestPlugin({
       config: {

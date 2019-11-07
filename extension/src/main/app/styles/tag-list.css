@@ -1,0 +1,44 @@
+.motif-taglist {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 8px 0 4px 0;
+}
+
+.motif-taglist-tags {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.motif-tag {
+  opacity: 0.6;
+  transition: opacity 300ms ease-in-out;
+}
+
+.motif-tag:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+
+.motif-taglist-songtag {
+  margin: 0 2px;
+}
+
+.motif-taglist-songtag > .motif-tag {
+  padding: 4px 16px;
+  background-color: #1DB954;
+  color: #FFFFFF;
+  border-radius: 18px;
+}
+
+.motif-taglist-addTag {
+  margin: 0 8px;
+}
+
+.motif-icon-addTag {
+  height: 8px;
+  width: auto;
+}

@@ -17,25 +17,19 @@ class App {
     // some element we are looking for that is guaranteed to be there eventually
 
     // eslint-disable-next-line no-unused-vars
-    this.sleep(3000).then((_r) => {
-      $('.tracklist').children().after("<button id='test'/>");
-      $('button#test').html('Get Info').on('click', () => {
-        const body = {
-          action: SPOTIFY_ACTIONS.ADD_PLAYLIST,
-          playlistInfo: {
-            name: 'My MANNN',
-            tracks: [],
-            isPublic: true,
-            isCollaborative: false,
-          },
-        };
-
-        // eslint-disable-next-line no-undef
-        chrome.runtime.sendMessage(body, (resp) => `Playlist created ${resp.uri}`);
-      });
-    });
+    this.updateTagLists();
     this.updateLogo();
   }
+
+  updateTagLists = () => setTimeout((resolve) => {
+    // eslint-disable-next-line no-undef
+    const tagListURL = chrome.extension.getURL('templates/tag-list.html');
+      $.get(tagListURL, (response) => {
+        $('.tracklist-col').css('height', 'auto');
+        $('.tracklist-row').css('height', 'auto');
+        $('.tracklist-col.name').children().after(response);
+      }, 'html');
+  }, 3000);
 
   // eslint-disable-next-line no-unused-vars
   updateLogo = () => setTimeout((resolve) => {

@@ -15,9 +15,10 @@
         "default_popup": "default.html"
     },
     "content_scripts": [{
+        "matches": ["https://open.spotify.com/*"],
         "js": ["content.js"],
         "run_at": "document_idle",
-        "matches": ["https://open.spotify.com/*"]
+        "css": ["styles/tag-list.css"]
     }],
     "background": {
         "scripts": ["background.js"],
@@ -28,5 +29,8 @@
         "identity",
         "storage"
         ],
-    "web_accessible_resources": ["assets/img/main-logo.svg"]
+    "web_accessible_resources": [
+        "assets/img/main-logo.svg",
+        "templates/tag-list.html"
+    ]
 }
