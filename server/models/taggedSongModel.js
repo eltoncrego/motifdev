@@ -1,4 +1,3 @@
-//Require Mongoose
 var mongoose = require('mongoose');
 
 const taggedSongSchema = new mongoose.Schema({
