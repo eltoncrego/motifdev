@@ -1,36 +1,45 @@
 {
-    "manifest_version": 2,
-
-    "name": "Spotify Tags",
-    "description": "An extension to help organize your music and spark joy.",
-    "version": "1.0",
-
-    "browser_action": {
-        "default_icon": {
-            "16": "assets/img/tags-icon@16.png",
-            "32": "assets/img/tags-icon@32.png",
-            "48": "assets/img/tags-icon@48.png",
-            "128": "assets/img/tags-icon@128.png"
-        },
-        "default_popup": "default.html"
+  "manifest_version": 2,
+  "name": "Spotify Tags",
+  "description": "An extension to help organize your music and spark joy.",
+  "version": "1.0",
+  "browser_action": {
+    "default_icon": {
+      "16": "assets/img/tags-icon@16.png",
+      "32": "assets/img/tags-icon@32.png",
+      "48": "assets/img/tags-icon@48.png",
+      "128": "assets/img/tags-icon@128.png"
     },
-    "content_scripts": [{
-        "matches": ["https://open.spotify.com/*"],
-        "js": ["content.js"],
-        "run_at": "document_idle",
-        "css": ["styles/tag-list.css"]
-    }],
-    "background": {
-        "scripts": ["background.js"],
-        "persistent": false
-    },
-    "permissions": [
-        "activeTab",
-        "identity",
-        "storage"
-        ],
-    "web_accessible_resources": [
-        "assets/img/main-logo.svg",
-        "templates/tag-list.html"
-    ]
+    "default_popup": "default.html"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://open.spotify.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle",
+      "css": [
+        "styles/tag-list.css"
+      ]
+    }
+  ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ],
+    "persistent": false
+  },
+  "permissions": [
+    "activeTab",
+    "identity",
+    "storage",
+    "tabs"
+  ],
+  "web_accessible_resources": [
+    "assets/img/main-logo.svg",
+    "templates/tag-list.html"
+  ]
 }

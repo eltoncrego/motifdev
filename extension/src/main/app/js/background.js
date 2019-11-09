@@ -1,6 +1,6 @@
 import 'babel-polyfill';
-import SPOTIFY_ACTIONS from './helpers';
-
+import SPOTIFY_ACTIONS from './constants/spotify_actions';
+import UserInterface from './ui-framework';
 
 // eslint-disable-next-line no-undef
 const redirectUri = chrome.identity.getRedirectURL('oauth2');
@@ -109,6 +109,10 @@ async function handleRequest(request, callback) {
 chrome.runtime.onMessage.addListener((request, sender, callback) => {
   handleRequest(request, callback);
   return true;
+});
+
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+  console.log(changeInfo);
 });
 
 // TODO finish up handlers to make all the requests....
