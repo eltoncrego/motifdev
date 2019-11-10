@@ -1,19 +1,19 @@
 import $ from '../../../lib/jquery-min';
 import SPOTIFY_CLASSES from './constants/spotify_classes';
 import ASSET_FILEPATHS from './constants/asset_filepaths';
-import MOTIF_CLASSES from './constants/motif_classes';
+import MOTIF_IDS from './constants/motif_ids';
 
 class UserInterface {
 
   handleLogo() {
     var mainLogo = $(SPOTIFY_CLASSES.MAIN_LOGO);
-    if ((mainLogo).attr('id') !== MOTIF_CLASSES.MAIN_LOGO_ID) {
+    if ((mainLogo).attr('id') !== MOTIF_IDS.MAIN_LOGO_ID) {
       this.updateLogo(mainLogo);
     }
   }
   
   updateLogo(mainLogo) {
-    setTimeout((resolve) => { 
+    setTimeout(() => {
       const ourSVGURL = chrome.extension.getURL(ASSET_FILEPATHS.MAIN_LOGO_SVG);
       var spotifyMainLogo = mainLogo || $(SPOTIFY_CLASSES.MAIN_LOGO);
       $.get(ourSVGURL, (response) => {
@@ -32,12 +32,23 @@ class UserInterface {
   }
 
   updateTagLists(){
-    setTimeout((resolve) => {
+    setTimeout(() => {
       const tagListURL = chrome.extension.getURL(ASSET_FILEPATHS.TAG_LIST_HTML);
       $.get(tagListURL, (response) => {
-        $(SPOTIFY_CLASSES.TRACK_UI_COLUMN).css('height', 'auto');
-        $(SPOTIFY_CLASSES.TRACK).css('height', 'auto');
-        $(SPOTIFY_CLASSES.TRACK_TEXT_COLUMN).children().after(response);
+        var tracklistColumns = $(SPOTIFY_CLASSES.TRACK_TEXT_COLUMN);
+        if (tracklistColumns.length > 0) {
+          var spotifyUICol = $(SPOTIFY_CLASSES.TRACK_UI_COLUMN);
+          var spotifyUITracks = $(SPOTIFY_CLASSES.TRACK);
+          spotifyUITracks.css('transition', 'opacity 300ms ease-in-out');
+          spotifyUITracks.css('opacity', '0');
+          setTimeout(() => {
+            spotifyUICol.css('height', 'auto');
+            spotifyUITracks.css('height', 'auto');
+            tracklistColumns.children().after(response);
+            $(MOTIF_IDS.TAGLIST_CLASS).css('opacity', '1');
+            spotifyUITracks.css('opacity', '1');
+          }, 400);
+        }
       }, 'html');
     }, 3000);
   }

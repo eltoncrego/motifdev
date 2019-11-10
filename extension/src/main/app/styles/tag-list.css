@@ -4,6 +4,8 @@
   justify-content: flex-start;
   align-items: center;
   padding: 8px 0 4px 0;
+  opacity: 0;
+  transition: opacity 300ms ease-in-out;
 }
 
 .motif-taglist-tags {

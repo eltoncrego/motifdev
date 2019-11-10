@@ -7,6 +7,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   switch (request) {
     case "reloadUI":
       ui.handleLogo();
+      ui.updateTagLists();
       sendResponse("Motif-client: reloaded UI");
       break;
     default:
