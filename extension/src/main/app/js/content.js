@@ -1,11 +1,15 @@
 import 'babel-polyfill';
 import '../styles/main.css';
-import Motif from './main';
+import UserInterface from './ui-framework';
 
-var motifapp = new Motif();
-
+var ui = new UserInterface
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  if (request.greeting === "reloadUI")
-    motifapp.run();
-    sendResponse("Motif: reloaded UI");
+  switch (request) {
+    case "reloadUI":
+      ui.handleLogo();
+      sendResponse("Motif-client: reloaded UI");
+      break;
+    default:
+      sendResponse("Motif-client: message not supported");
+  }
 });

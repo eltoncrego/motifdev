@@ -2,6 +2,16 @@ import 'babel-polyfill';
 import SPOTIFY_ACTIONS from './constants/spotify_actions';
 import UserInterface from './ui-framework';
 
+// This block of code handles the call and response for UI updates
+console.log("Motif-background: Extension is running.")
+chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+  if (changeInfo.status === "complete"){ 
+    chrome.tabs.sendMessage(tabId, "reloadUI", function(response) {
+      console.log(response);
+    });
+  }
+});
+
 // eslint-disable-next-line no-undef
 const redirectUri = chrome.identity.getRedirectURL('oauth2');
 const clientId = '6ffaf918d8124705b1d013e475a3af03';
@@ -109,15 +119,6 @@ async function handleRequest(request, callback) {
 chrome.runtime.onMessage.addListener((request, sender, callback) => {
   handleRequest(request, callback);
   return true;
-});
-
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-  console.log(changeInfo);
-  if (changeInfo.status === "complete"){ 
-    chrome.tabs.sendMessage(tabId, "reloadUI", function(response) {
-      console.log(response);
-    });
-  }
 });
 
 // TODO finish up handlers to make all the requests....

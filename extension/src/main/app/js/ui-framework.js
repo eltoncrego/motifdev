@@ -1,14 +1,22 @@
 import $ from '../../../lib/jquery-min';
 import SPOTIFY_CLASSES from './constants/spotify_classes';
 import ASSET_FILEPATHS from './constants/asset_filepaths';
+import MOTIF_CLASSES from './constants/motif_classes';
 
 class UserInterface {
+
+  handleLogo() {
+    var mainLogo = $(SPOTIFY_CLASSES.MAIN_LOGO);
+    if ((mainLogo).attr('id') !== MOTIF_CLASSES.MAIN_LOGO_ID) {
+      this.updateLogo(mainLogo);
+    }
+  }
   
-  updateLogo() {
+  updateLogo(mainLogo) {
     setTimeout((resolve) => { 
       const ourSVGURL = chrome.extension.getURL(ASSET_FILEPATHS.MAIN_LOGO_SVG);
+      var spotifyMainLogo = mainLogo || $(SPOTIFY_CLASSES.MAIN_LOGO);
       $.get(ourSVGURL, (response) => {
-        let spotifyMainLogo = $(SPOTIFY_CLASSES.MAIN_LOGO);
         if (spotifyMainLogo.length > 0) {
           spotifyMainLogo.css('opacity', '0');
           setTimeout(() => {
