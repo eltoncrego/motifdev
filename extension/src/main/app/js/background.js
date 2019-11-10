@@ -113,6 +113,11 @@ chrome.runtime.onMessage.addListener((request, sender, callback) => {
 
 chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
   console.log(changeInfo);
+  if (changeInfo.status === "complete"){ 
+    chrome.tabs.sendMessage(tabId, "reloadUI", function(response) {
+      console.log(response);
+    });
+  }
 });
 
 // TODO finish up handlers to make all the requests....
