@@ -3,12 +3,28 @@ import AccessorProvider from './ui_selection/accessor_provider';
 // import SPOTIFY_ACTIONS from './helpers';
 
 class Main {
+  sleep = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
   run() {
     this.changeSpotify();
+    // (function(ns, fetch){
+    //   if(typeof fetch !== 'function') return;
+      
+    //   ns.fetch = function() {
+    //     var out = fetch.apply(this, arguments);
+    //     out.then((resp) => {
+    //     resp2 = resp.clone()		
+    //     resp2.json().then(console.log)
+    //     })
+        
+    //     return out;
+    //   }
+      
+    // }(window, window.fetch))
+    
     return true;
   }
 
-  sleep = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   async changeSpotify() {
     // Need to wait for spotifies dom structure to load... happens through react so it
