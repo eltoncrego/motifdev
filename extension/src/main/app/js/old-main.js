@@ -1,6 +1,8 @@
 import $ from '../../../lib/jquery-min';
 import AccessorProvider from './ui_selection/applicatorProvider';
-// import SPOTIFY_ACTIONS from './helpers';
+import SPOTIFY_CLASSES from './constants/spotify_classes';
+import FILEPATHS from './constants/filepaths';
+// import SPOTIFY_ACTIONS from './spotify_actions';
 
 class Main {
   sleep = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -59,15 +61,15 @@ class Main {
   // eslint-disable-next-line no-unused-vars
   updateLogo = () => setTimeout((resolve) => {
     // eslint-disable-next-line no-undef
-    const ourSVGURL = chrome.extension.getURL('assets/img/main-logo.svg');
+    const ourSVGURL = chrome.extension.getURL(FILEPATHS.MAIN_LOGO_SVG);
     $.get(ourSVGURL, (response) => {
-      let spotifySVG = document.getElementsByClassName('spotify-logo--text');
+      let spotifySVG = document.getElementsByClassName(SPOTIFY_CLASSES.MAIN_LOGO);
       if (spotifySVG && spotifySVG[0] && spotifySVG[0].parentElement) {
         spotifySVG[0].style.opacity = 0;
         setTimeout(() => {
           spotifySVG[0].parentElement.innerHTML = response;
           setTimeout(() => {
-            spotifySVG = document.getElementsByClassName('spotify-logo--text');
+            spotifySVG = document.getElementsByClassName(SPOTIFY_CLASSES.MAIN_LOGO);
             spotifySVG[0].style.opacity = 1;
           }, 300);
         }, 500);
