@@ -4,15 +4,15 @@ import '../styles/main.css';
 import UserInterface from './ui-framework';
 import SPOTIFY_CLASSES from './constants/spotify_classes';
 
-var ui = new UserInterface
-var target = document.querySelector('#main');
+var ui = new UserInterface;
 var observer = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
-        console.log(mutation.type);
+      if ($(mutations.addedNodes)(SPOTIFY_CLASSES.MAIN_LOGO)) {
+        console.log(mutation.addedNodes);
+      }
     });
 });
-var config = { attributes: true, childList: true, characterData: true }
-observer.observe(target, config);
+observer.observe(document.querySelector(SPOTIFY_CLASSES.MAIN_ID), {childList: true, subtree: true});
 
   // ui.handleLogo();
   // ui.updateTagLists();
