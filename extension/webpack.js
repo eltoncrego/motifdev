@@ -36,6 +36,10 @@ const config = {
         from: 'src/assets',
         to: 'assets',
       },
+      {
+        from: 'src/main/app/styles',
+        to: 'styles',
+      }
     ]),
     new WebpackExtensionManifestPlugin({
       config: {

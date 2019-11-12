@@ -1,4 +1,4 @@
-import ApplicatorProvider from './ui_selection/applicatorProvider';
+import ApplicatorProvider from './ui_selection/applicator-provider';
 
 class Main {
   sleep = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));

@@ -1,7 +1,7 @@
-import $ from '../../../lib/jquery-min';
-import AccessorProvider from './ui_selection/applicatorProvider';
-import SPOTIFY_CLASSES from './constants/spotify_classes';
-import FILEPATHS from './constants/filepaths';
+import $ from '../../../../lib/jquery-min';
+import AccessorProvider from '../ui_selection/applicator-provider';
+import SPOTIFY_CLASSES from '../constants/spotify_classes';
+import FILEPATHS from '../constants/filepaths';
 // import SPOTIFY_ACTIONS from './spotify_actions';
 
 class Main {
