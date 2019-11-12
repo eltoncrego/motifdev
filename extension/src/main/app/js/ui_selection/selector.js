@@ -1,6 +1,6 @@
 class Selector {
-  constructor(selectFn) {
-    this.apply = selectFn;
+  constructor(select) {
+    this.select = select;
   }
 }
 
