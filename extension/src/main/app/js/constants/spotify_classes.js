@@ -1,6 +1,7 @@
 const SPOTIFY_CLASSES = {
   /* Main UI Elements*/
   MAIN_LOGO: '.spotify-logo--text',
+  MAIN_ID: '#main',
 
   /* Assorted Track Elements */
   TRACK: '.tracklist-row',

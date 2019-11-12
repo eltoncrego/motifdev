@@ -28,7 +28,7 @@ class UserInterface {
           }, 500);
         }
       }, 'html');
-    }, 3000);
+    }, 100);
   }
 
   updateTagLists(){
@@ -36,7 +36,7 @@ class UserInterface {
       const tagListURL = chrome.extension.getURL(ASSET_FILEPATHS.TAG_LIST_HTML);
       $.get(tagListURL, (response) => {
         var tracklistColumns = $(SPOTIFY_CLASSES.TRACK_TEXT_COLUMN);
-        if (tracklistColumns.length > 0) {
+        if (tracklistColumns.length > 0 && tracklistColumns.find(".motif-taglist").length === 0) {
           var spotifyUICol = $(SPOTIFY_CLASSES.TRACK_UI_COLUMN);
           var spotifyUITracks = $(SPOTIFY_CLASSES.TRACK);
           spotifyUITracks.css('transition', 'opacity 300ms ease-in-out');
@@ -50,7 +50,7 @@ class UserInterface {
           }, 400);
         }
       }, 'html');
-    }, 3000);
+    }, 1500);
   }
 }
 

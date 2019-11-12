@@ -3,15 +3,15 @@ import SPOTIFY_ACTIONS from './constants/spotify_actions';
 import UserInterface from './ui-framework';
 
 // This block of code handles the call and response for UI updates
-console.log("Motif-background: Extension is running.")
-chrome.tabs.onUpdated.addListener(function(tabId, changeInfo) {
-  console.log("Motif-background:", changeInfo)
-  if (changeInfo.status === "complete"){ 
-    chrome.tabs.sendMessage(tabId, "reloadUI", function(response) {
-      console.log(response);
-    });
-  }
-});
+console.log("Motif-background: Extension is running.");
+// chrome.tabs.onUpdated.addListener(function(tabId, changeInfo) {
+//   console.log("Motif-background:", changeInfo)
+//   if (changeInfo.status === "complete"){ 
+//     chrome.tabs.sendMessage(tabId, "reloadUI", function(response) {
+//       console.log(response);
+//     });
+//   }
+// });
 
 // eslint-disable-next-line no-undef
 // const redirectUri = chrome.identity.getRedirectURL('oauth2');
