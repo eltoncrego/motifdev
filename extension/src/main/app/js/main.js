@@ -7,20 +7,20 @@ class Main {
 
   run() {
     this.changeSpotify();
-    // (function(ns, fetch){
-    //   if(typeof fetch !== 'function') return;
+    (function(ns, fetch){
+      if(typeof fetch !== 'function') return;
       
-    //   ns.fetch = function() {
-    //     var out = fetch.apply(this, arguments);
-    //     out.then((resp) => {
-    //     resp2 = resp.clone()		
-    //     resp2.json().then(console.log)
-    //     })
+      ns.fetch = function() {
+        var out = fetch.apply(this, arguments);
+        out.then((resp) => {
+        resp2 = resp.clone()		
+        resp2.json().then(console.log)
+        })
         
-    //     return out;
-    //   }
+        return out;
+      }
       
-    // }(window, window.fetch))
+    }(window, window.fetch))
     
     return true;
   }
