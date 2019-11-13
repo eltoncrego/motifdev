@@ -22,14 +22,15 @@ const authorize = () => new Promise((resolve, reject) => { // TODO handle reject
   // eslint-disable-next-line no-undef
   chrome.identity.launchWebAuthFlow({
     url: `https://accounts.spotify.com/authorize?${buildQueryString({
-      clientId,
-      redirectUri,
+      client_id: clientId,
+      redirect_uri: redirectUri,
       response_type: 'token',
       scope: ['playlist-modify-private', 'playlist-modify-public'],
       state,
     })}`,
     interactive: true,
   }, (redirectURL) => {
+    console.log(redirectURL);
     const params = new URLSearchParams(redirectURL.split('#')[1]);
 
     if (params.get('state') !== state) {

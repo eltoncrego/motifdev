@@ -5,6 +5,7 @@ class Main {
   constructor() {
     this.applicators = new ApplicatorProvider().getApplicators();
   }
+
   sleep = async (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   log = (m) => {
@@ -17,12 +18,15 @@ class Main {
       this.updateUI();
 
       // explictly defining lambda instead of using method reference is needed to bind 'this'
-      new UIModListener().listen(() => this.sleep(3000).then(_ => this.updateUI()));
+      new UIModListener().listen(() => {
+        this.sleep(3000).then((_) => this.updateUI());
+        return true;
+      });
     });
   }
 
   updateUI() {
-    this.log("Updating UI")
+    this.log('Updating UI');
     this.applicators.forEach((a) => a());
   }
 }
