@@ -12,17 +12,17 @@ class Main {
 
     // (function(ns, fetch){
     //   if(typeof fetch !== 'function') return;
-      
+
     //   ns.fetch = function() {
     //     var out = fetch.apply(this, arguments);
     //     out.then((resp) => {
-    //     resp2 = resp.clone()		
+    //     resp2 = resp.clone()
     //     resp2.json().then(console.log)
     //     })
-        
+
     //     return out;
     //   }
-      
+
     // }(window, window.fetch))
     return true;
   }
@@ -44,7 +44,7 @@ class Main {
       // $("button#test").html("Get Info").on("click", () => {
       //     var body = {
       //         action : SPOTIFY_ACTIONS.ADD_PLAYLIST,
-      //         playlistInfo : {
+      //         options : {
       //             name : "My MANNN",
       //             tracks : [],
       //             isPublic : true,
@@ -104,3 +104,33 @@ export default Main;
 //         var targetNode = $("#main")[0]
 //         observer.observe(targetNode, observerConfig);
 //     })
+/*
+ TODO:
+ Look into how we're refreshing things... I think the easiest route is tracking dom changes then just
+ doing a query based on the window.href
+
+ window.addEventListener('popstate', (e) => console.log(e.target.location.href));
+
+(function(history, pushState){
+      if(typeof pushState !== 'function') return;
+
+      history.pushState = function() {
+		out = pushState.apply(this, arguments)
+        window.dispatchEvent(new Event('popstate'));
+
+
+        return out;
+      }
+
+    }(history, history.pushState))
+
+ Look into search... does it return recent searches?
+
+ doesn't work w/ search b/c pushstate isn't actually called :(
+
+  this works though
+
+  observer = new MutationObserver((mutations) => mutations.forEach(() => {if (document.location.href != oldHref) {oldHref = document.location.href; console.log(oldHref)}}))
+
+
+*/

@@ -1,5 +1,5 @@
 import 'babel-polyfill';
-import SPOTIFY_ACTIONS from './spotify_actions';
+import SPOTIFY_ACTIONS from './constants/spotify_actions';
 
 // eslint-disable-next-line no-undef
 const redirectUri = chrome.identity.getRedirectURL('oauth2');
@@ -89,13 +89,31 @@ async function handleAddPlaylist(playlistInfo, callback) {
   callback(data);
 }
 
+async function handleGetPlaylistOrAlbumTracks(options, callback) {
+  const data = await api(`/${options.type}/${options.id}/tracks`,
+    {
+      method: 'get',
+    });
+  callback(data);
+}
+
 async function handleRequest(request, callback) {
-  const userInfo = await api('/me');
   const { action } = request;
   if (action === SPOTIFY_ACTIONS.ADD_PLAYLIST) {
+    const userInfo = await api('/me');
     handleAddPlaylist({
-      ...request.playlistInfo,
+      ...request.options,
       userId: userInfo.id,
+    }, callback);
+  } else if (action === SPOTIFY_ACTIONS.GET_PLAYLIST_TRACKS) {
+    handleGetPlaylistOrAlbumTracks({
+      ...request.options,
+      type: 'playlists',
+    }, callback);
+  } else if (action === SPOTIFY_ACTIONS.GET_ALBUM_TRACKS) {
+    handleGetPlaylistOrAlbumTracks({
+      ...request.options,
+      type: 'albums',
     }, callback);
   }
   return true;

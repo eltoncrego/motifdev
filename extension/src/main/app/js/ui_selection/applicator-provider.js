@@ -9,8 +9,8 @@ class ApplicatorProvider {
     this.accessors = [];
     const tracklistSelector = new Selector(() => $(SPOTIFY_CLASSES.TRACK_TEXT_COLUMN).children());
     const songRowModifer = new Modifier((selection) => {
-      selection.after("<p id='ours'>hey friend ;)</p>")}
-    );
+      selection.after("<p id='ours'>hey friend ;)</p>");
+    });
     const defaultAccessor = new Applicator(tracklistSelector, songRowModifer);
     this.accessors.push(defaultAccessor.build());
   }
