@@ -14,10 +14,7 @@ class Main {
 
   run() {
     this.sleep(3000).then((r) => {
-      // update once before changes are realized
       this.updateUI();
-
-      // explictly defining lambda instead of using method reference is needed to bind 'this'
       new UIModListener().listen(() => {
         this.sleep(3000).then((_) => this.updateUI());
         return true;
