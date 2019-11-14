@@ -1,4 +1,4 @@
-import FILEPATHS from './constants/filepaths.js';
+import FILEPATHS from '../constants/filepaths.js';
 
 class tagList {
   async init() {

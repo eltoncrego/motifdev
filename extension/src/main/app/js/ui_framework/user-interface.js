@@ -1,33 +1,34 @@
+import $ from '../../../../lib/jquery-min';
 import tagList from '../components/tag-list';
-import logo from '../components/logo';
+import MOTIF_CLASSES from '../constants/motif_classes';
+import FILEPATHS from '../constants/filepaths';
+import SPOTIFY_CLASSES from '../constants/spotify_classes';
 
 class UserInterface {
-  // handleLogo() {
-  //   const mainLogo = $(SPOTIFY_CLASSES.MAIN_LOGO);
-  //   if ((mainLogo).attr('id') !== MOTIF_IDS.MAIN_LOGO_ID) {
-  //     this.updateLogo(mainLogo);
-  //   }
-  // }
+  handleLogo(selection) {
+    const mainLogo = selection;
+    if (mainLogo.attr('id') !== MOTIF_CLASSES.MAIN_LOGO_ID) {
+      this.updateLogo(mainLogo);
+    }
+  }
 
-  updateLogo() {
-    var motifLogo = new logo().getLogo();
-    console.log(motifLogo);
-    // setTimeout(() => {
-    //   const ourSVGURL = chrome.extension.getURL(ASSET_FILEPATHS.MAIN_LOGO_SVG);
-    //   let spotifyMainLogo = mainLogo || $(SPOTIFY_CLASSES.MAIN_LOGO);
-    //   $.get(ourSVGURL, (response) => {
-    //     if (spotifyMainLogo.length > 0) {
-    //       spotifyMainLogo.css('opacity', '0');
-    //       setTimeout(() => {
-    //         spotifyMainLogo.replaceWith(response);
-    //         setTimeout(() => {
-    //           spotifyMainLogo = $(SPOTIFY_CLASSES.MAIN_LOGO);
-    //           spotifyMainLogo.css('opacity', '1');
-    //         }, 300);
-    //       }, 500);
-    //     }
-    //   }, 'html');
-    // }, 100);
+  updateLogo(mainLogo) {
+    setTimeout(() => {
+      const ourSVGURL = chrome.extension.getURL(FILEPATHS.MAIN_LOGO_SVG);
+      let spotifyMainLogo = mainLogo || $(SPOTIFY_CLASSES.MAIN_LOGO);
+      $.get(ourSVGURL, (response) => {
+        if (spotifyMainLogo.length > 0) {
+          spotifyMainLogo.css('opacity', '0');
+          setTimeout(() => {
+            spotifyMainLogo.replaceWith(response);
+            setTimeout(() => {
+              spotifyMainLogo = $(SPOTIFY_CLASSES.MAIN_LOGO);
+              spotifyMainLogo.css('opacity', '1');
+            }, 300);
+          }, 500);
+        }
+      }, 'html');
+    }, 100);
   }
 
   updateTagLists() {
