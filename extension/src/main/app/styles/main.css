@@ -1,10 +1,57 @@
 @font-face {
-  font-family: "ProximaNova-Bold";
+  font-family: "Bold";
   src: url("../../../assets/fonts/ProximaNova-Bold.otf") format("opentype");
 }
 
-h1 {
-  font-family: 'ProximaNova-Bold';
+@font-face {
+  font-family: "Regular";
+  src: url("../../../assets/fonts/ProximaNova-Regular.otf") format("opentype");
+}
+
+html.motif-popup {
+  background-color: #191414;
+  color: #FFFFFF;
+}
+
+div.motif-popup {
+  margin: 8px 16px 16px 16px;
+}
+
+div.motif-popup-title {
+  display: flex;
+  align-items: center;
+}
+
+div.motif-popup-title > .motif-title-logo {
+  height: 32px;
+}
+
+div.motif-popup-title > h1 {
+  font-family: 'Bold';
+  width: 500px;
+  margin-left: 8px;
+}
+
+div.motif-extension-about {
+  width: 500px;
+}
+
+div.motif-extension-about > p {
+  display: inline;
+  font-family: 'Regular';
+  opacity: 0.6;
+}
+
+div.motif-extension-about > .motif-link {
+  display: inline;
+  opacity: 1;
+  color: #FFFFFF;
+  text-decoration: none;
+  transition: border-bottom 100ms linear;
+}
+
+div.motif-extension-about > .motif-link:hover {
+  border-bottom: 1px solid #FFFFFF;
 }
 
 .spotify-logo--text {

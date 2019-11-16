@@ -9,17 +9,12 @@ class ApplicatorProvider {
   init() {
     this.applicators = [];
     this.ui = new UserInterface();
-    const tracklistSelector = new Selector(() => $(SPOTIFY_CLASSES.TRACK_TEXT_COLUMN).children());
     const logoSelector = new Selector(() => $(SPOTIFY_CLASSES.MAIN_LOGO));
     const logoModifier = new Modifier((selection) => {
       this.ui.handleLogo(selection);
     });
-    const songRowModifer = new Modifier((selection) => {
-      selection.after("<p id='ours'>hey friend ;)</p>");
-    });
-    const defaultApplicator = new Applicator(tracklistSelector, songRowModifer);
     const logoApplicator = new Applicator(logoSelector, logoModifier);
-    this.applicators.push(defaultApplicator.build(), logoApplicator.build());
+    this.applicators.push(logoApplicator.build());
   }
 
   getApplicators() {
