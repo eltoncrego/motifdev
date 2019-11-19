@@ -9,6 +9,7 @@ class ApplicatorProvider {
   init() {
     this.applicators = [];
     this.ui = new UserInterface();
+    // Handle Spotify logo exchange
     const logoSelector = new Selector(() => $(SPOTIFY_CLASSES.MAIN_LOGO));
     const logoModifier = new Modifier((selection) => {
       this.ui.handleLogo(selection);

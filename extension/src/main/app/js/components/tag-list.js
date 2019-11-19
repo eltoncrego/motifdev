@@ -1,3 +1,4 @@
+import $ from '../../../../lib/jquery-min';
 import FILEPATHS from '../constants/filepaths.js';
 
 class tagList {

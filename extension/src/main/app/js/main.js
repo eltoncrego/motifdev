@@ -1,5 +1,6 @@
 import ApplicatorProvider from './ui_selection/applicator-provider';
 import UIModListener from './ui_selection/uimod-listener';
+import UserInterface from './ui_framework/user-interface';
 
 class Main {
   constructor() {
@@ -23,8 +24,9 @@ class Main {
   }
 
   updateUI() {
+    this.ui = this.ui || new UserInterface();
     this.log('Updating UI');
-    this.applicators.forEach((a) => a());
+    this.ui.init();
   }
 }
 

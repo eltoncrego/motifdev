@@ -1,41 +1,48 @@
 import $ from '../../../../lib/jquery-min';
-import tagList from '../components/tag-list';
 import MOTIF_CLASSES from '../constants/motif_classes';
-import FILEPATHS from '../constants/filepaths';
 import SPOTIFY_CLASSES from '../constants/spotify_classes';
+import logo from '../components/logo';
+import tagList from '../components/tag-list';
+
+function addTag(r){
+  alert("Add tag for " + r.target.parentNode.parentElement.parentElement.parentElement.parentElement.getElementsByClassName("tracklist-name")[0].textContent);
+}
 
 class UserInterface {
-  handleLogo(selection) {
-    const mainLogo = selection;
-    if (mainLogo.attr('id') !== MOTIF_CLASSES.MAIN_LOGO_ID) {
-      this.updateLogo(mainLogo);
+  init() {
+    this.handleLogo();
+    this.initTaglists();
+  }
+
+  handleLogo() {
+    this.mainLogo = this.mainLogo || $(SPOTIFY_CLASSES.MAIN_LOGO);
+    if (this.mainLogo.attr('id') !== MOTIF_CLASSES.MAIN_LOGO_ID) {
+      this.updateLogo();
     }
   }
 
-  updateLogo(mainLogo) {
+  updateLogo() {
     setTimeout(() => {
-      const ourSVGURL = chrome.extension.getURL(FILEPATHS.MAIN_LOGO_SVG);
-      let spotifyMainLogo = mainLogo || $(SPOTIFY_CLASSES.MAIN_LOGO);
-      $.get(ourSVGURL, (response) => {
-        if (spotifyMainLogo.length > 0) {
-          spotifyMainLogo.css('opacity', '0');
+      new logo().init().then((response) => {
+        if (this.mainLogo.length > 0) {
+          this.mainLogo.css('opacity', '0');
           setTimeout(() => {
-            spotifyMainLogo.replaceWith(response);
+            this.mainLogo.replaceWith(response);
             setTimeout(() => {
-              spotifyMainLogo = $(SPOTIFY_CLASSES.MAIN_LOGO);
-              spotifyMainLogo.css('opacity', '1');
+              this.mainLogo = $(SPOTIFY_CLASSES.MAIN_LOGO);
+              this.mainLogo.css('opacity', '1');
             }, 300);
           }, 500);
         }
-      }, 'html');
+      });
     }, 100);
   }
 
-  updateTagLists() {
+  initTaglists() {
     setTimeout(() => {
       const tracklistColumns = $(SPOTIFY_CLASSES.TRACK_TEXT_COLUMN);
-      new tagList.init().then((response) => {
-        if (tracklistColumns.length > 0 && tracklistColumns.find('.motif-taglist').length === 0) {
+      new tagList().init().then((response) => {
+        if (tracklistColumns.length > 0 && tracklistColumns.find(MOTIF_CLASSES.TAGLIST_CLASS).length === 0) {
           const spotifyUICol = $(SPOTIFY_CLASSES.TRACK_UI_COLUMN);
           const spotifyUITracks = $(SPOTIFY_CLASSES.TRACK);
           spotifyUITracks.css('transition', 'opacity 300ms ease-in-out');
@@ -44,8 +51,13 @@ class UserInterface {
             spotifyUICol.css('height', 'auto');
             spotifyUITracks.css('height', 'auto');
             tracklistColumns.children().after(response);
-            $(MOTIF_IDS.TAGLIST_CLASS).css('opacity', '1');
+            $(MOTIF_CLASSES.TAGLIST_CLASS).css('opacity', '1')
             spotifyUITracks.css('opacity', '1');
+
+            var tags = $(".motif-taglist-addTag");
+            tags.click((r) => {
+              addTag(r);
+            });
           }, 400);
         }
       });
