@@ -119,7 +119,6 @@ async function handleRequest(request, callback) {
   }
   return true;
 }
-
 // eslint-disable-next-line no-undef
 chrome.runtime.onMessage.addListener((request, sender, callback) => {
   handleRequest(request, callback);

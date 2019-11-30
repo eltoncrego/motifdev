@@ -37,6 +37,10 @@ const config = {
         to: 'assets',
       },
       {
+        from: 'src/main/app/templates',
+        to: 'templates',
+      },
+      {
         from: 'src/main/app/styles',
         to: 'styles',
       }
