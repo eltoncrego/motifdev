@@ -5,15 +5,16 @@ import SPOTIFY_ACTIONS from '../constants/spotify_actions';
 class UIModListener {
   constructor() {
     this.currentHref = document.location.href;
+    this.update;
   }
 
   listen(update) {
     const config = { childList: true, subtree: true };
+    this.update = update;
     this.observer = new MutationObserver((mutations) => mutations.forEach(() => {
       if (document.location.href != this.currentHref) {
         this.currentHref = document.location.href;
-        update();
-        this.fetchPageInfo();
+        this.fire();
       }
     }));
     this.observer.observe($(SPOTIFY_CLASSES.MAIN_APP_ID)[0], config);
@@ -21,6 +22,11 @@ class UIModListener {
 
   disconnect() {
     this.observer.disconnect();
+  }
+
+  // Can't be called before listen
+  fire() {
+      this.fetchPageInfo().then((resp) => this.update(resp));
   }
 
   // TODO extract this logic into some other class... this is merely a test
@@ -47,7 +53,25 @@ class UIModListener {
       },
     };
 
-    chrome.runtime.sendMessage(body, (resp) => console.log(`Songs fetched: ${JSON.stringify(resp)}`));
+    return this.sendMessagePromise(body);
+  }
+
+  /**
+   * Promise wrapper for chrome.tabs.sendMessage
+   * @param tabId
+   * @param item
+   * @returns {Promise<any>}
+   */
+  sendMessagePromise(body) {
+    return new Promise((resolve, reject) => {
+        chrome.runtime.sendMessage(body, response => {
+            if(response.complete) {
+                resolve(response);
+            } else {
+                reject('Something wrong');
+            }
+        });
+    });
   }
 }
 

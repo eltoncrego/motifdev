@@ -4,6 +4,7 @@
   "description": "Spark joy. ",
   "main": "content.js",
   "scripts": {
+    "build": "rm -rf build; webpack --config webpack.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint ."
   },
@@ -28,6 +29,8 @@
     "webpack-extension-manifest-plugin": "^0.5.0"
   },
   "dependencies": {
-    "babel-polyfill": "^6.26.0"
+    "babel-polyfill": "^6.26.0",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.2"
   }
 }

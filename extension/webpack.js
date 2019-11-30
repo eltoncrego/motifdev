@@ -8,19 +8,19 @@ const config = {
   mode: 'development',
   devtool: 'cheap-module-source-map',
   entry: {
-    content: path.join(__dirname, 'src/main/app/js/content.js'),
+    content: path.join(__dirname, 'src/main/app/js/content.ts'),
     background: path.join(__dirname, 'src/main/app/js/background.js'),
   },
   output: {
     path: path.resolve(__dirname, './build'),
     filename: '[name].js',
   },
-  // resolve: {
-  //   extensions: ["*", ".js"]
-  // },
+  resolve: {
+    extensions: [".js", ".ts"]
+  },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'boilerplate', // change this to your app title
+      title: 'motif', 
       meta: {
         charset: 'utf-8',
         viewport: 'width=device-width, initial-scale=1, shrink-to-fit=no',
@@ -49,6 +49,11 @@ const config = {
   ],
   module: {
     rules: [
+      {
+        test: /\.ts$/,
+        exclude: /node_modules/,
+        use: ['ts-loader'],
+      },
       {
         test: /\.js$/,
         exclude: /node_modules/,

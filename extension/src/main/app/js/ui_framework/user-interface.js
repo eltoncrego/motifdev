@@ -5,7 +5,7 @@ import FILEPATHS from '../constants/filepaths';
 import SPOTIFY_CLASSES from '../constants/spotify_classes';
 
 class UserInterface {
-  handleLogo(selection) {
+  handleLogo(selection, pageInfo) {
     const mainLogo = selection;
     if (mainLogo.attr('id') !== MOTIF_CLASSES.MAIN_LOGO_ID) {
       this.updateLogo(mainLogo);

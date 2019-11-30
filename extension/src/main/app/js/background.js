@@ -87,7 +87,7 @@ async function handleAddPlaylist(playlistInfo, callback) {
       method: 'post',
       body: JSON.stringify(body),
     });
-  callback(data);
+  callback({complete: true, ...data});
 }
 
 async function handleGetPlaylistOrAlbumTracks(options, callback) {
@@ -95,7 +95,7 @@ async function handleGetPlaylistOrAlbumTracks(options, callback) {
     {
       method: 'get',
     });
-  callback(data);
+  callback({complete: true, ...data});
 }
 
 async function handleRequest(request, callback) {
