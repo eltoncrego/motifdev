@@ -36,11 +36,22 @@ class UIModListener {
     const splitUrl = this.currentHref.split('/');
     const rootIndex = splitUrl.indexOf('open.spotify.com');
     const type = splitUrl[rootIndex + 1];
+    let responseTransform = (r) => r;
     let action;
     if (type === 'playlist') {
       action = SPOTIFY_ACTIONS.GET_PLAYLIST_TRACKS;
+      responseTransform = (pageInfo) => (
+        {
+          trackNameToId: pageInfo.items.map((item) => item.track).reduce((currentMap, track) => ({[track.name]: track.id, ...currentMap}), {}),
+          pageType: "playlist"
+      });
     } else if (type === 'album') {
       action = SPOTIFY_ACTIONS.GET_ALBUM_TRACKS;
+      responseTransform = (pageInfo) => (
+        {
+          trackNameToId: pageInfo.items.reduce((currentMap, track) => ({[track.name]: track.id, ...currentMap}), {}),
+          pageType: "album"
+      });
     } else {
       console.log(`Fetching page type ${type} currently not supported.`);
       return;
@@ -53,7 +64,7 @@ class UIModListener {
       },
     };
 
-    return this.sendMessagePromise(body);
+    return this.sendMessagePromise(body, responseTransform);
   }
 
   /**
@@ -62,11 +73,11 @@ class UIModListener {
    * @param item
    * @returns {Promise<any>}
    */
-  sendMessagePromise(body) {
+  sendMessagePromise(body, responseTransform = (r) => r) {
     return new Promise((resolve, reject) => {
         chrome.runtime.sendMessage(body, response => {
             if(response.complete) {
-                resolve(response);
+                resolve(responseTransform(response));
             } else {
                 reject('Something wrong');
             }

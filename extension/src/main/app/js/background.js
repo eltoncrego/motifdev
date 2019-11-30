@@ -98,6 +98,14 @@ async function handleGetPlaylistOrAlbumTracks(options, callback) {
   callback({complete: true, ...data});
 }
 
+async function handleGetMe(options, callback) {
+  const data = await api(`/me`,
+    {
+      method: 'get',
+    });
+  callback({complete: true, ...data});
+}
+
 async function handleRequest(request, callback) {
   const { action } = request;
   if (action === SPOTIFY_ACTIONS.ADD_PLAYLIST) {
@@ -116,6 +124,8 @@ async function handleRequest(request, callback) {
       ...request.options,
       type: 'albums',
     }, callback);
+  } else if (action === SPOTIFY_ACTIONS.ME) {
+    handleGetMe(request.options, callback);
   }
   return true;
 }
@@ -124,6 +134,3 @@ chrome.runtime.onMessage.addListener((request, sender, callback) => {
   handleRequest(request, callback);
   return true;
 });
-
-// TODO finish up handlers to make all the requests....
-// probably good to make an external class and delegate to that?

@@ -1,9 +1,11 @@
 import Applicator from './ui_selection/applicator';
 import ApplicatorProvider from './ui_selection/applicator-provider';
 import UIModListener from './ui_selection/uimod-listener';
+import SPOTIFY_ACTIONS from './constants/spotify_actions';
 class Main {
   // applicators: Applicator[]; 
   applicators: any; 
+  chrome: any;
   constructor() {
     this.applicators = new ApplicatorProvider().getApplicators();
   }
@@ -16,6 +18,7 @@ class Main {
 
   run() {
     this.sleep(3000).then((r) => {
+      this.initMe();
       var listner = new UIModListener(); 
       listner.listen((pageInfo: any) => {
         this.sleep(3000).then((_) => this.updateUI(pageInfo));
@@ -27,12 +30,20 @@ class Main {
   }
 
   updateUI(pageInfo: any) {
-    const trackNameToId = pageInfo.items.map((item: any) => item.track).reduce((currentMap: object, track: any) => ({[track.name]: track.id, ...currentMap}), {});
+    const trackNameToId = pageInfo.trackNameToId;
 
     // TODO query for songs -> tags w/ this info 
 
     this.applicators.forEach((a: Applicator) => a.applyWithInfo(trackNameToId)); 
     return;
+  }
+
+  initMe() {
+    let body: Object = {action: SPOTIFY_ACTIONS.ME, options: {}};
+    // @ts-ignore
+    chrome.runtime.sendMessage(body, (response: any) => {
+      localStorage.setItem("userId", response.id)
+    });
   }
 }
 
