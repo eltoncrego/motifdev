@@ -4,12 +4,14 @@ import SPOTIFY_CLASSES from '../constants/spotify_classes';
 import logo from '../components/logo';
 import tagList from '../components/tag-list';
 
-function addTag(r){
-  alert("Add tag for " + r.target.parentNode.parentElement.parentElement.parentElement.parentElement.getElementsByClassName("tracklist-name")[0].textContent);
+function addTag(r, trackNameToId){
+  var trackName = r.target.parentNode.parentElement.parentElement.parentElement.parentElement.getElementsByClassName("tracklist-name")[0].textContent;
+  alert("Add tag for " + trackNameToId[trackName]);
 }
 
 class UserInterface {
-  init() {
+  init(trackNameToId) {
+    this.trackNameToId = trackNameToId;
     this.handleLogo();
     this.initTaglists();
   }
@@ -56,7 +58,7 @@ class UserInterface {
 
             var tags = $(".motif-taglist-addTag");
             tags.click((r) => {
-              addTag(r);
+              addTag(r, this.trackNameToId);
             });
           }, 400);
         }

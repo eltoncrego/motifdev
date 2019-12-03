@@ -2,10 +2,12 @@ import Applicator from './ui_selection/applicator';
 import ApplicatorProvider from './ui_selection/applicator-provider';
 import UIModListener from './ui_selection/uimod-listener';
 import SPOTIFY_ACTIONS from './constants/spotify_actions';
+import UserInterface from './ui_framework/user-interface';
 class Main {
   // applicators: Applicator[]; 
   applicators: any; 
   chrome: any;
+  ui: any;
   constructor() {
     this.applicators = new ApplicatorProvider().getApplicators();
   }
@@ -30,11 +32,10 @@ class Main {
   }
 
   updateUI(pageInfo: any) {
+    this.ui = this.ui || new UserInterface();
     const trackNameToId = pageInfo.trackNameToId;
-
-    // TODO query for songs -> tags w/ this info 
-
-    this.applicators.forEach((a: Applicator) => a.applyWithInfo(trackNameToId)); 
+    console.log(trackNameToId);
+    this.ui.init(trackNameToId);
     return;
   }
 
