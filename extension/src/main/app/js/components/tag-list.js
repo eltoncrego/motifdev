@@ -1,7 +1,7 @@
 import $ from '../../../../lib/jquery-min';
 import FILEPATHS from '../constants/filepaths.js';
 
-class tagList {
+class TagList {
   async init() {
     this.tagList = null;
     const tagListURL = chrome.extension.getURL(FILEPATHS.TAG_LIST_HTML);
@@ -16,4 +16,4 @@ class tagList {
   }
 }
 
-export default tagList;
+export default TagList;

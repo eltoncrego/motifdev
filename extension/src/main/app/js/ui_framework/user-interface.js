@@ -2,7 +2,7 @@ import $ from '../../../../lib/jquery-min';
 import MOTIF_CLASSES from '../constants/motif_classes';
 import SPOTIFY_CLASSES from '../constants/spotify_classes';
 import logo from '../components/logo';
-import tagList from '../components/tag-list';
+import TagList from '../components/tag-list';
 
 function addTag(r, trackNameToId){
   var trackName = r.target.parentNode.parentElement.parentElement.parentElement.parentElement.getElementsByClassName("tracklist-name")[0].textContent;
@@ -43,7 +43,7 @@ class UserInterface {
   initTaglists() {
     setTimeout(() => {
       const tracklistColumns = $(SPOTIFY_CLASSES.TRACK_TEXT_COLUMN);
-      new tagList().init().then((response) => {
+      new TagList().init().then((response) => {
         if (tracklistColumns.length > 0 && tracklistColumns.find(MOTIF_CLASSES.TAGLIST_CLASS).length === 0) {
           const spotifyUICol = $(SPOTIFY_CLASSES.TRACK_UI_COLUMN);
           const spotifyUITracks = $(SPOTIFY_CLASSES.TRACK);
