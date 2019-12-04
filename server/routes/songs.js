@@ -21,7 +21,8 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/tag/add', function (req, res, next) {
-  if (req.body.songId && req.body.tag && req.body.userId && req.body.songName && req.body.artist) {
+  console.log(req.body);
+  if (req.body.songId && req.body.tag && req.body.userId) {
     Tag.find({
       userId: req.body.userId,
       tag: req.body.tag
@@ -38,8 +39,6 @@ router.post('/tag/add', function (req, res, next) {
             },
               {
                 $push: { tagIds: tagVal[0]._id },
-                artist: req.body.artist,
-                songName: req.body.songName
               },
               {
                 new: true, upsert: true
@@ -60,8 +59,6 @@ router.post('/tag/add', function (req, res, next) {
         },
           {
             $push: { tagIds: tag[0]._id },
-            artist: req.body.artist,
-            songName: req.body.songName
           },
           {
             new: true, upsert: true
@@ -119,32 +116,31 @@ router.post('/tag/delete', function (req, res, next) {
   }
 });
 
-router.post('/tags', function (req, res, next) {
-  if (req.body.songIds && req.body.userId) {
+router.get('/tags', function (req, res, next) {
+   var songIds = req.param("songIds").split(",");
+   var userId = req.param("userId")
+  if (songIds && userId) {
     var resolvedMap = {};
     Song.find({
-      'songId': { $in: req.body.songIds },
-      'userId': req.body.userId
+      'songId': { $in: songIds},
+      'userId': userId
     }).then(async function (songs) {
-      if (songs.length == 0) {
-        return res.status(500).send({
-          "message": "Couldn't find songs: " + req.body.songIds,
-          "status": "FAILURE"
-        });
-      } else {
-        for (var i = 0; i < songs.length; i++) {
-          var song = songs[i];
-          resolvedMap[song.songId] = { "tags": [] };
-          for (var j = 0; j < song.tagIds.length; j++) {
-            await Tag.findById(song.tagIds[j], function (err, tag) {
-              if (tag && !resolvedMap[song.songId].tags.includes(tag.tag)) {
-                resolvedMap[song.songId].tags.push(tag.tag);
-              }
-            });
-          }
+      for (var i = 0; i < songs.length; i++) {
+        var song = songs[i];
+        resolvedMap[song.songId] = { "tags": [] };
+        for (var j = 0; j < song.tagIds.length; j++) {
+          await Tag.findById(song.tagIds[j], function (err, tag) {
+            if (tag && !resolvedMap[song.songId].tags.includes(tag.tag)) {
+              resolvedMap[song.songId].tags.push(tag.tag);
+            }
+          });
         }
       }
-      return res.status(200).send(resolvedMap);
+
+      return res.status(200).send({
+        data: resolvedMap,
+        status: "SUCCESS"
+      });
     });
   } else {
     return res.status(500).send("There was a problem adding the tag. Not all required fields present");

@@ -10,8 +10,8 @@ function addTag(r, trackNameToId){
 }
 
 class UserInterface {
-  init(trackNameToId) {
-    this.trackNameToId = trackNameToId;
+  init(trackNameToMetadata) {
+    this.trackNameToId = trackNameToMetadata;
     this.handleLogo();
     this.initTaglists();
   }

@@ -6,7 +6,6 @@ import UserInterface from './ui_framework/user-interface';
 class Main {
   // applicators: Applicator[]; 
   applicators: any; 
-  chrome: any;
   ui: any;
   constructor() {
     this.applicators = new ApplicatorProvider().getApplicators();
@@ -33,9 +32,9 @@ class Main {
 
   updateUI(pageInfo: any) {
     this.ui = this.ui || new UserInterface();
-    const trackNameToId = pageInfo.trackNameToId;
-    console.log(trackNameToId);
-    this.ui.init(trackNameToId);
+    const trackNameToMetadata = pageInfo.trackNameToMetadata;
+    console.log(pageInfo);
+    this.ui.init(trackNameToMetadata);
     return;
   }
 
