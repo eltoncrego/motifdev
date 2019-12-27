@@ -6,9 +6,11 @@ const SPOTIFY_CLASSES = {
   // main track class
   TRACK: '.tracklist-row',
   // column ui class
-  TRACK_UI_COLUMN: '.tracklist-col',
+  TRACK_CONTEXT_WRAPPER: '> .react-contextmenu-wrapper',
   // column specifically for track name and artist text
   TRACK_TEXT_COLUMN: '.tracklist-col.name',
+  // div that holds track's name
+  TRACK_TEXT_DIV: '.tracklist-name',
 };
 
 export default SPOTIFY_CLASSES;

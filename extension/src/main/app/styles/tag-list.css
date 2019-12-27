@@ -3,9 +3,10 @@
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
-  padding: 8px 0 4px 0;
+  padding: 0 0 0 38px;
   opacity: 0;
   transition: opacity 300ms ease-in-out;
+  margin: 10px 0;
 }
 
 .motif-taglist-tags {
@@ -15,19 +16,48 @@
   justify-content: flex-start;
 }
 
+.motif-taglist-tags > li {
+  margin: 0 2px;
+}
+
 .motif-tag {
+  opacity: 0.8;
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.motif-tag-delete-container {
+  width: 16px;
+  height: 16px;
+  margin: 0 -10px 0 8px;
+  display: flex;
+  align-items: center;
+}
+
+.motif-tag-delete {
+  width: 8px;
+  height: 8px;
+  display: block;
+  fill: inherit;
+  flex-shrink: 0;
+  backface-visibility: hidden;
   opacity: 0.6;
   transition: opacity 300ms ease-in-out;
 }
 
-.motif-tag:hover {
-  opacity: 1;
+.motif-tag-delete-container:hover {
   cursor: pointer;
 }
 
-.motif-taglist-songtag {
-  margin: 0 2px;
+.motif-tag-delete:hover {
+  opacity: 1;
 }
+
+/* .motif-tag:hover {
+  opacity: 1;
+  cursor: pointer;
+} */
 
 .motif-taglist-songtag > .motif-tag {
   padding: 4px 16px;
@@ -38,6 +68,12 @@
 
 .motif-taglist-addTag {
   margin: 0 8px;
+  transition: opacity 300ms ease-in-out;
+}
+
+.motif-taglist-addTag:hover {
+  cursor: pointer;
+  opacity: 1;
 }
 
 .motif-icon-addTag {

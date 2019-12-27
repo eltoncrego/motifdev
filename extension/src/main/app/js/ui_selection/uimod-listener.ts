@@ -2,6 +2,7 @@ import $ from '../../../../lib/jquery-min';
 import SPOTIFY_CLASSES from '../constants/spotify_classes';
 import SPOTIFY_ACTIONS from '../constants/spotify_actions';
 import MotifApi from '../apis/motif_api';
+import {normalizeSpotifyName} from '../ext/helpers';
 
 type UpdateFn = (resp: any) => void;
 type NullableObserver = MutationObserver | null;
@@ -48,16 +49,26 @@ class UIModListener {
     let action;
     if (type === 'playlist') {
       action = SPOTIFY_ACTIONS.GET_PLAYLIST_TRACKS;
-      responseTransform = (pageInfo) => (
-        {
-          trackNameToId: pageInfo.items.map((item: any) => item.track).reduce((currentMap: any, track: any) => ({[track.name]: track.id, ...currentMap}), {}),
-          pageType: "playlist"
-      });
+      responseTransform = (pageInfo) => {
+            const trackMap = new Map();
+            pageInfo.items.map((item: any) => item.track).forEach((track: any) => { 
+              trackMap.set(track.name, track.id);
+            });
+          return {
+            trackNameToId: trackMap,
+            pageType: "playlist" 
+        } 
+      }
     } else if (type === 'album') {
       action = SPOTIFY_ACTIONS.GET_ALBUM_TRACKS;
-      responseTransform = (pageInfo) => (
+      responseTransform = (pageInfo) => ( // TODO chnage like above
         {
-          trackNameToId: pageInfo.items.reduce((currentMap: any, track: any) => ({[track.name]: track.id, ...currentMap}), {}),
+          trackNameToId: pageInfo.items.reduce((currentMap: any, track: any) => {
+            const trackName = track.name;
+            return {
+              ...currentMap, [trackName]: track.id
+            }
+          }, {}),
           pageType: "album"
       });
     } else {

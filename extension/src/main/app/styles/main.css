@@ -57,3 +57,54 @@ div.motif-extension-about > .motif-link:hover {
 .spotify-logo--text {
   transition: opacity 500ms ease-in-out;
 }
+
+.motif-tag-autocomplete-input {
+  background-color: rgba(255,255,255,0.1);
+  border-radius: 18px;
+  border: none;
+  outline: none;
+  padding: 4px 0 4px 10px;
+}
+
+.motif-tag-autocomplete-data {
+  position: absolute;
+  top: 31px; /* should be a calc */
+  background: rgba(44, 44,44, 1); /* TODO change this... not totally the right color */
+  z-index: 1;
+  border-radius: 10px;
+  width: 100%;
+}
+
+.motif-tag-autocomplete-option {
+  background: rgba(44, 44,44, 1); /* TODO change this... not totally the right color */
+  padding: 5px;
+  width: 100%;
+  border: none;
+  text-align: left;
+}
+
+.motif-tag-autocomplete-option:hover {
+  background: rgba(88, 88, 88, 1); /* TODO change this... not totally the right color */
+  cursor: pointer;
+}
+
+.motif-tag-autocomplete-data > input:first-child {
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
+}
+
+.motif-tag-autocomplete-data > input:last-child {
+  border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.motif-autocomplete-container {
+  display: flex;
+  visibility: hidden;
+  position: absolute;
+  margin: 0 px;
+}
+
+.motif-tag-autocomplete {
+  display: flex;
+}
