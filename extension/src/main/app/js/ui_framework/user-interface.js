@@ -66,7 +66,7 @@ class UserInterface {
 
               $(elem).find(".motif-tag-delete-container").on("hover", function() {
                 $(this).find(".motif-tag-delete").hover();
-              }).on("click", function() {classRef.handleDelete(this, trackMetadata.tags)});
+              }).on("click", function() {classRef.handleDelete(this, trackMetadata)});
               return elem;
             });
 
@@ -126,7 +126,7 @@ class UserInterface {
         classRef.motifApi.addTagToSong(localStorage.getItem("userId"), this.value, trackMetadata.id)
           .then(resp => { // TODO change up error handling? 
             if (resp.status == "SUCCESS") {
-              classRef.addTagFromChild(this, existingTags);
+              classRef.addTagFromChild(this, trackMetadata);
             }
           });
       });
@@ -134,8 +134,9 @@ class UserInterface {
     }
   }
 
-  addTagFromChild(childElem, existingTags) {
+  addTagFromChild(childElem, trackMetadata) {
     const classRef = this;
+    const existingTags = trackMetadata.tags;
     existingTags.push(childElem.value);
     var p = $(childElem);
     while (p.attr("class") !== "motif-taglist") {
@@ -147,7 +148,7 @@ class UserInterface {
 
     p.find(".motif-tag-delete-container").on("hover", function() {
       $(this).find(".motif-tag-delete").hover();
-    }).on("click", function() {classRef.handleDelete(this, existingTags)});
+    }).on("click", function() {classRef.handleDelete(this, trackMetadata)});
 
     p.find(".motif-tag-autocomplete-data").empty();
     p.find(".motif-taglist-autocomplete").css({"visibility": "hidden", "position": "absolute"});
@@ -161,7 +162,7 @@ class UserInterface {
     this.motifApi.addTagToSong(localStorage.getItem("userId"), inputElem.value, trackMetadata.id)
       .then(resp => { // TODO change up error handling? 
         if (resp.status == "SUCCESS") {
-          this.addTagFromChild(inputElem, existingTags);
+          this.addTagFromChild(inputElem, trackMetadata);
           const storageTags = JSON.parse(localStorage.getItem("tags"));
           storageTags.tags.push({"name": inputElem.value});
           localStorage.setItem("tags", JSON.stringify(storageTags));
@@ -169,14 +170,20 @@ class UserInterface {
       });
   }
 
-  handleDelete(toDelElem, existingTags) { 
-    // TODO persist this removal through api
+  handleDelete(toDelElem, trackMetadata) { 
+    const existingTags = trackMetadata.tags;
     var p = $(toDelElem);
     while (p.attr("class") !== "motif-taglist-songtag") {
       p = p.parent();
     }
-    existingTags.splice(existingTags.indexOf(p.find("span").html()), 1);
-    p.remove()
+    const tag = p.find("span").html();
+    this.motifApi.deleteTagFromSong(localStorage.getItem("userId"), tag, trackMetadata.id)
+      .then(resp => { // TODO change up error handling? 
+        if (resp.status == "SUCCESS") {
+          existingTags.splice(existingTags.indexOf(p.find("span").html()), 1);
+          p.remove()
+        }
+      });
   }
 
   buildTagDiv(tag) {

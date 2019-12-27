@@ -51,13 +51,21 @@ class MotifApi {
     }
 
     addTagToSong(userId: string, tag: string, songId: string): Promise<any> {
+        return this.addOrDeleteTagFromSong(userId, tag, songId);
+    }
+
+    deleteTagFromSong(userId: string, tag: string, songId: string): Promise<any> {
+        return this.addOrDeleteTagFromSong(userId, tag, songId, true);
+    }
+
+    addOrDeleteTagFromSong(userId: string, tag: string, songId: string, isDelete: boolean = false): Promise<any> {
         const baseUrl = this.baseUrl
         const body = {
             userId,
             tag,
             songId
         }
-        return fetch(`${baseUrl}/songs/tag/add`, 
+        return fetch(`${baseUrl}/songs/tag/${isDelete ? "delete" : "add"}`, 
             {
                 "method": "post",
                 headers: {
