@@ -7,6 +7,7 @@
   opacity: 0;
   transition: opacity 300ms ease-in-out;
   margin: 10px 0;
+  max-width: 100%;
 }
 
 .motif-taglist-tags {
@@ -14,17 +15,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
-}
-
-.motif-taglist-tags > li {
-  margin: 0 2px;
-}
-
-.motif-tag {
-  opacity: 0.8;
-  position: relative;
-  display: flex;
-  align-items: center;
+  flex-wrap: wrap;
 }
 
 .motif-tag-delete-container {
@@ -54,16 +45,17 @@
   opacity: 1;
 }
 
-/* .motif-tag:hover {
-  opacity: 1;
-  cursor: pointer;
-} */
-
 .motif-taglist-songtag > .motif-tag {
   padding: 4px 16px;
   background-color: #1DB954;
   color: #FFFFFF;
   border-radius: 18px;
+  display: flex;
+  align-items: center;
+}
+
+.motif-taglist-songtag > .motif-tag.motif-operator {
+  background-color: #aaa;
 }
 
 .motif-taglist-addTag {

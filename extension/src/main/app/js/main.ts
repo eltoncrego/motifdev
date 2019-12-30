@@ -13,6 +13,7 @@ class Main {
   constructor() {
     this.applicators = new ApplicatorProvider().getApplicators();
     this.motifApi = new MotifApi();
+    this.ui = new UserInterface();
   }
 
   sleep = async (ms : number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -23,8 +24,9 @@ class Main {
 
   run() {
     this.sleep(3000).then((r) => {
-      this.initMe().then(_ => this.initTags()).then(_ => console.log(localStorage.getItem("tags")));
+      this.initMe().then(_ => this.initTags());
       var listner = new UIModListener(); 
+      this.ui.init();
       listner.listen((pageInfo: any) => {
         this.sleep(3000).then((_) => this.updateUI(pageInfo));
         return true;
@@ -35,10 +37,9 @@ class Main {
   }
 
   updateUI(pageInfo: any) {
-    this.ui = this.ui || new UserInterface(); 
     // TODO make this pattern ^ into composition and make each component address a certain page... can trigger based on pageInfo.pageType
     const trackNameToMetadata = pageInfo.trackNameToMetadata;
-    this.ui.init(trackNameToMetadata);
+    this.ui.update(trackNameToMetadata);
     return;
   }
 

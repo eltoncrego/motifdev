@@ -1,39 +1,123 @@
 import $ from '../../../../lib/jquery-min';
 import MOTIF_CLASSES from '../constants/motif_classes';
 import SPOTIFY_CLASSES from '../constants/spotify_classes';
-import logo from '../components/logo';
 import HtmlLoader from '../components/html-loader';
 import FILEPATHS from '../constants/filepaths';
 import MotifApi from '../apis/motif_api';
+import AutoComplete from './autocomplete';
 
 class UserInterface {
-  init(trackNameToMetadata) {
-    this.trackNameToMetadata = trackNameToMetadata;
-    this.handleLogo();
-    this.initTaglists();
+  constructor() {
     this.motifApi = new MotifApi();
+    this.autoComplete = new AutoComplete();
   }
 
-  handleLogo() {
-    this.mainLogo = this.mainLogo || $(SPOTIFY_CLASSES.MAIN_LOGO);
-    if (this.mainLogo.attr('id') !== MOTIF_CLASSES.MAIN_LOGO_ID) {
-      this.updateLogo();
-    }
+  init() {
+    this.updateLogo();
+    this.initModal();
+  }
+
+  update(trackNameToMetadata) {
+    this.trackNameToMetadata = trackNameToMetadata;
+    this.initTaglists();
+  }
+
+  initModal() {
+    const classRef = this;
+    new HtmlLoader(FILEPATHS.SEARCH_MODAL).getHtml().then((response) => {
+      $("body").append(response);
+      const container = $(".motif-search-container");
+      const chosenTags = [];
+
+      container.find(".motif-tag-autocomplete-input")
+        .blur(function(e) {
+              this.value = ''; 
+              // ignore blur and let option on click handle this
+              if (e.relatedTarget && e.relatedTarget.getAttribute("class") === 'motif-tag-autocomplete-option') { 
+                return;
+              }
+              container.find(".motif-tag-autocomplete-data").empty();
+            })
+        .on("input", this.autoComplete.init(chosenTags, JSON.parse(localStorage.getItem("tags")).tags.map(tag => tag.name), container, 
+          function() {
+            container.find(".motif-autocomplete-search-li").before(classRef.buildTagDiv(this.value));
+            chosenTags.push(this.value)
+            container.find(".motif-tag-autocomplete-data").empty();
+            container.find(".motif-tag-delete-container").on("hover", function() {
+                $(this).find(".motif-tag-delete").hover();
+              }).on("click", function() {
+                var p = $(this);
+                while (p.attr("class") !== "motif-taglist-songtag") {
+                  p = p.parent();
+                }
+                const tag = p.find("span").html();
+                chosenTags.splice(chosenTags.indexOf(tag), 1);
+                p.remove()
+                classRef.updateModalSearchText();
+              });
+
+            classRef.updateModalSearchText();
+          }))
+        .on("keypress", function(e) {
+          if(e.which !== 13) {
+            return;
+          }  
+          const operators = ["and", "or", "(", ")"];
+          
+          if (operators.indexOf(this.value) !== -1) {
+            container.find(".motif-autocomplete-search-li").before(classRef.buildTagDiv(this.value, true));
+            // TODO add delete functon to tag.. make sure to update search text w/ it
+            container.find(".motif-tag-delete-container").on("hover", function() {
+              $(this).find(".motif-tag-delete").hover();
+            }).on("click", function() {
+              var p = $(this);
+              while (p.attr("class") !== "motif-taglist-songtag") {
+                p = p.parent();
+              }
+              const tag = p.find("span").html();
+              chosenTags.splice(chosenTags.indexOf(tag), 1);
+              p.remove()
+              classRef.updateModalSearchText();
+            });
+            container.find(".motif-tag-autocomplete-input")[0].value = "";
+            classRef.updateModalSearchText();
+          }
+        }); 
+    });
+
+    new HtmlLoader(FILEPATHS.LOGO_TAG_ONLY).getHtml().then((response) => {
+      $(SPOTIFY_CLASSES.MAIN_HEADER).append(response);
+      $(".motif-tag-logo").on("click", function() {
+        $(".motif-modal").css("display", "flex");
+      });
+
+      $(".motif-modal").on("click", function(e) {
+        if (e.target.className === "motif-modal") {
+          $(this).css("display", "none");
+        }
+      });
+    });
+  }
+
+  updateModalSearchText() {
+    // TODO add validation and maybe kick off query to our backend if validation passes
+    var text = [];
+    $(".motif-search-query > .motif-taglist-songtag").find("span").each((i, e) => text.push(e.textContent));
+    $(".motif-search-query-text > span").text(text.join(" "));
   }
 
   updateLogo() {
+    this.mainLogo = $(SPOTIFY_CLASSES.MAIN_LOGO);
     setTimeout(() => {
-      new logo().init().then((response) => {
-        if (this.mainLogo.length > 0) {
-          this.mainLogo.css('opacity', '0');
+      new HtmlLoader(FILEPATHS.MAIN_LOGO_SVG).getHtml().then((response) => {
+        this.mainLogo.css('opacity', '0');
+        setTimeout(() => {
+          this.mainLogo.replaceWith(response);
           setTimeout(() => {
-            this.mainLogo.replaceWith(response);
-            setTimeout(() => {
-              this.mainLogo = $(SPOTIFY_CLASSES.MAIN_LOGO);
-              this.mainLogo.css('opacity', '1');
-            }, 300);
-          }, 500);
-        }
+            this.mainLogo = $(SPOTIFY_CLASSES.MAIN_LOGO)
+            this.mainLogo.css('opacity', '1');
+          }, 300);
+        }, 500);
       });
     }, 100);
   }
@@ -55,7 +139,7 @@ class UserInterface {
           // 3. convert string to html
           // 4. add in the right callbacks 
           setTimeout(() => {
-            tracklistColumns.children().after(function(index) { 
+            tracklistColumns.append(function(index) { 
               // We're relying on the fact that the order of songs in playlist view should be the same as that returned by api
               const trackMetadata = classRef.trackNameToMetadata.get(Array.from(classRef.trackNameToMetadata.keys())[index]);
               let tagsText = "";
@@ -84,27 +168,36 @@ class UserInterface {
     }, 300);
   }
   
-    showAutoComplete(tagElem, trackMetadata, tagListUl) {
-      const autoCompleteDiv = $(tagElem).parent().find(".motif-taglist-autocomplete");
-      autoCompleteDiv.css({"visibility": "visible", "position": "relative"});
-      $(tagElem).css({"visibility": "hidden", "position": "absolute"});
-      const classRef = this;
+  showAutoComplete(tagElem, trackMetadata, tagListUl) {
+    const autoCompleteDiv = $(tagElem).parent().find(".motif-taglist-autocomplete");
+    autoCompleteDiv.css({"visibility": "visible", "position": "relative"});
+    $(tagElem).css({"visibility": "hidden", "position": "absolute"});
+    const classRef = this;
 
-      autoCompleteDiv.find(".motif-tag-autocomplete-input")
-        .off() 
-        .focus()
-        .blur(function(e) {
-          this.value = ''; 
-          // ignore blur and let option on click handle this
-          if (e.relatedTarget && e.relatedTarget.getAttribute("class") === 'motif-tag-autocomplete-option') { 
-            return;
-          }
-          tagListUl.find(".motif-tag-autocomplete-data").empty();
-          autoCompleteDiv.css({"visibility": "hidden", "position": "absolute"});
-          $(tagElem).css({"visibility": "visible", "position": "relative"})
-        })
-        .on("input", this.initAutoComplete(trackMetadata, tagListUl))
-        .on("keypress", function(e) {e.which === 13  && classRef.handleEnter(this, trackMetadata)});
+    autoCompleteDiv.find(".motif-tag-autocomplete-input")
+      .off() 
+      .focus()
+      .blur(function(e) {
+        this.value = ''; 
+        // ignore blur and let option on click handle this
+        if (e.relatedTarget && e.relatedTarget.getAttribute("class") === 'motif-tag-autocomplete-option') { 
+          return;
+        }
+        tagListUl.find(".motif-tag-autocomplete-data").empty();
+        autoCompleteDiv.css({"visibility": "hidden", "position": "absolute"});
+        $(tagElem).css({"visibility": "visible", "position": "relative"})
+      })
+      // .on("input", this.initAutoComplete(trackMetadata, tagListUl))
+      .on("input", this.autoComplete.init(trackMetadata.tags, JSON.parse(localStorage.getItem("tags")).tags.map(tag => tag.name),
+                tagListUl, function() {
+                  classRef.motifApi.addTagToSong(localStorage.getItem("userId"), this.value, trackMetadata.id)
+                    .then(resp => { // TODO change up error handling? 
+                      if (resp.status == "SUCCESS") {
+                        classRef.addTagFromChild(this, trackMetadata);
+                      }
+                    });
+                }))
+      .on("keypress", function(e) {e.which === 13  && classRef.handleEnter(this, trackMetadata)});
   }
 
   initAutoComplete(trackMetadata, tagListUl) {
@@ -130,7 +223,6 @@ class UserInterface {
             }
           });
       });
-
     }
   }
 
@@ -186,9 +278,9 @@ class UserInterface {
       });
   }
 
-  buildTagDiv(tag) {
+  buildTagDiv(tag, isOperator = false) {
     return  `<li class="motif-taglist-songtag">
-          <div class="motif-tag motif-tag-song">
+          <div class="motif-tag motif-tag-song ${isOperator ? "motif-operator" : ""}">
             <span>${tag}</span>
             <div class="motif-tag-delete-container">
               <svg viewBox="0 0 8 8" class="motif-tag-delete"><polygon points="8 1.01818182 6.98181818 0 4 2.98181818 1.01818182 0 0 1.01818182 2.98181818 4 0 6.98181818 1.01818182 8 4 5.01818182 6.98181818 8 8 6.98181818 5.01818182 4"></polygon></svg>
