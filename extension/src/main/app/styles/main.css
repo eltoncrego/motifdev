@@ -172,6 +172,7 @@ div.motif-extension-about > .motif-link:hover {
 
 .motif-search-query-text {
   margin: 0 0 8% 0;
+  display: flex;
 }
 
 .motif-search-results-container {
@@ -186,4 +187,45 @@ div.motif-extension-about > .motif-link:hover {
 .motif-create-playlist-btn {
   margin: 0 auto;
   display: block;
+  background-color: #1DB954;
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: #fff;
+  border: none;
+}
+
+.motif-create-playlist-btn:hover { 
+  cursor: pointer;
+}
+
+.motif-success-icon {
+  fill: #1DB954;
+  margin-left: 10px;
+  display: none;
+}
+
+.motif-error-icon {
+  fill: #B00020;
+  display: none;
+}
+
+.motif-error-icon-container {
+  margin-left: 10px;
+  position: relative;
+}
+
+/* make sure to adjust this based on svg size */
+
+/* TODO you can fine tune the top / height based on dynamic height sizing*/
+.motif-error-tooltip {
+  position: absolute;
+  top: -76px;
+  left: -90px;
+  border-radius: 4px;
+  background-color: #191414;
+  color: #fff;
+  display: none;
+  width: 200px;
+  opacity: 0.9;
+  height: 70px;
 }

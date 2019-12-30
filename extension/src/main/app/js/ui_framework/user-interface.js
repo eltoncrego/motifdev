@@ -5,11 +5,13 @@ import HtmlLoader from '../components/html-loader';
 import FILEPATHS from '../constants/filepaths';
 import MotifApi from '../apis/motif_api';
 import AutoComplete from './autocomplete';
+import QueryValidator from '../ext/query-validator';
 
 class UserInterface {
   constructor() {
     this.motifApi = new MotifApi();
     this.autoComplete = new AutoComplete();
+    this.queryValidator = new QueryValidator();
   }
 
   init() {
@@ -26,6 +28,14 @@ class UserInterface {
     const classRef = this;
     new HtmlLoader(FILEPATHS.SEARCH_MODAL).getHtml().then((response) => {
       $("body").append(response);
+
+      // Initial stuff
+      $(".motif-search-query-text").find(".motif-error-icon-container").on("mouseenter", function() {
+        $(this).find(".motif-error-tooltip").css("display", "block");
+      }).on("mouseleave", function() {
+        $(this).find(".motif-error-tooltip").css("display", "none");
+      });
+
       const container = $(".motif-search-container");
       const chosenTags = [];
 
@@ -66,7 +76,6 @@ class UserInterface {
           
           if (operators.indexOf(this.value) !== -1) {
             container.find(".motif-autocomplete-search-li").before(classRef.buildTagDiv(this.value, true));
-            // TODO add delete functon to tag.. make sure to update search text w/ it
             container.find(".motif-tag-delete-container").on("hover", function() {
               $(this).find(".motif-tag-delete").hover();
             }).on("click", function() {
@@ -74,8 +83,6 @@ class UserInterface {
               while (p.attr("class") !== "motif-taglist-songtag") {
                 p = p.parent();
               }
-              const tag = p.find("span").html();
-              chosenTags.splice(chosenTags.indexOf(tag), 1);
               p.remove()
               classRef.updateModalSearchText();
             });
@@ -100,10 +107,25 @@ class UserInterface {
   }
 
   updateModalSearchText() {
-    // TODO add validation and maybe kick off query to our backend if validation passes
     var text = [];
     $(".motif-search-query > .motif-taglist-songtag").find("span").each((i, e) => text.push(e.textContent));
-    $(".motif-search-query-text > span").text(text.join(" "));
+    const searchQueryText = $(".motif-search-query-text")
+    if (text.length !== 0) {
+      const validityQuery = this.queryValidator.validateQuery(text);
+      if (!validityQuery.valid) {
+        searchQueryText.find(".motif-success-icon").css("display", "none");
+        searchQueryText.find(".motif-error-icon").css("display", "block");
+        searchQueryText.find(".motif-error-tooltip > div").text(validityQuery.error);
+      } else {
+        searchQueryText.find(".motif-success-icon").css("display", "block");
+        searchQueryText.find(".motif-error-icon").css("display", "none");
+      }
+    } else {
+        searchQueryText.find(".motif-success-icon").css("display", "none");
+        searchQueryText.find(".motif-error-icon").css("display", "none");
+    }
+
+    searchQueryText.find("span").text(text.join(" "));
   }
 
   updateLogo() {
