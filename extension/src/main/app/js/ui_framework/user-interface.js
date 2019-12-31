@@ -92,9 +92,9 @@ class UserInterface {
         }); 
     });
 
-    new HtmlLoader(FILEPATHS.LOGO_TAG_ONLY).getHtml().then((response) => {
+    new HtmlLoader(FILEPATHS.MENU_LOGO).getHtml().then((response) => {
       $(SPOTIFY_CLASSES.MAIN_HEADER).append(response);
-      $(".motif-tag-logo").on("click", function() {
+      $(".motif-menu-button").on("click", function() {
         $(".motif-modal").css("display", "flex");
       });
 

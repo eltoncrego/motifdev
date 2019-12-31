@@ -33,7 +33,7 @@
         ],
     "web_accessible_resources": [
         "assets/img/main-logo.svg", 
-        "assets/img/logo-tag-only.svg", 
+        "assets/img/tags-icon-menu.svg", 
         "templates/tag-list.html",
         "templates/search-modal.html"
     ]
