@@ -40,3 +40,7 @@ test('Test trailing opening paren', () => {
 test('Test early closing paren', () => {
     expect(new QueryValidator().validateQuery(["(", "guitar", ")", ")", "and", "(", "happy", "or", "sad"]).valid).toBe(false);
 }); 
+
+test('Test starting operator', () => {
+    expect(new QueryValidator().validateQuery(["and", "guitar"]).valid).toBe(false);
+}); 

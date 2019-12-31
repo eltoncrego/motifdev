@@ -76,6 +76,7 @@ class UserInterface {
           
           if (operators.indexOf(this.value) !== -1) {
             container.find(".motif-autocomplete-search-li").before(classRef.buildTagDiv(this.value, true));
+            container.find(".motif-tag-autocomplete-data").empty();
             container.find(".motif-tag-delete-container").on("hover", function() {
               $(this).find(".motif-tag-delete").hover();
             }).on("click", function() {

@@ -43,6 +43,11 @@ class QueryValidator {
             return state;
         }
 
+        if (state.lastToken === null) {
+            state.error = "Operators cannot begin a query";
+            return state;
+        }
+
         state.lastToken = token;
         return state;
     }
