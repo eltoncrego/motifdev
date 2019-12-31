@@ -8,6 +8,7 @@ const logger = require('morgan');
 const indexRouter = require('./routes/index');
 const songsRouter = require('./routes/songs');
 const tagsRouter = require('./routes/tags');
+const searchRouter = require('./routes/search');
 
 const db = require('./controllers/mongo');
 
@@ -27,6 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/songs', songsRouter);
 app.use('/tags', tagsRouter);
+app.use('/search', searchRouter);
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
   next(createError(404));

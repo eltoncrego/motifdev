@@ -2,10 +2,10 @@
 class AutoComplete {
     constructor() {}
 
-    init(existingData, availableData, containingElement, selectionCallback) {
+    init(existingData, availableDataGetter, containingElement, selectionCallback) {
         // TODO make this more efficient? 
         return function onInputChange() {
-            const dataToShow = availableData.filter(datum => existingData.indexOf(datum) === -1);
+            const dataToShow = availableDataGetter().filter(datum => existingData.indexOf(datum) === -1);
             const data = containingElement.find(".motif-tag-autocomplete-data");
             data.empty();
             const prefix = this.value;

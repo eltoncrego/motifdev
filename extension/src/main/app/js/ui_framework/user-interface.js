@@ -48,7 +48,7 @@ class UserInterface {
               }
               container.find(".motif-tag-autocomplete-data").empty();
             })
-        .on("input", this.autoComplete.init(chosenTags, JSON.parse(localStorage.getItem("tags")).tags.map(tag => tag.name), container, 
+        .on("input", this.autoComplete.init(chosenTags, () => JSON.parse(localStorage.getItem("tags")).tags.map(tag => tag.name), container, 
           function() {
             container.find(".motif-autocomplete-search-li").before(classRef.buildTagDiv(this.value));
             chosenTags.push(this.value)
@@ -119,6 +119,7 @@ class UserInterface {
       } else {
         searchQueryText.find(".motif-success-icon").css("display", "block");
         searchQueryText.find(".motif-error-icon").css("display", "none");
+        this.onValidQuery(text);
       }
     } else {
         searchQueryText.find(".motif-success-icon").css("display", "none");
@@ -126,6 +127,15 @@ class UserInterface {
     }
 
     searchQueryText.find("span").text(text.join(" "));
+  }
+
+  onValidQuery(query) {
+    this.motifApi.executeQuery(localStorage.getItem("userId"), query).then(resp => {
+      const searchResultsUl = $(".motif-search-results").empty();
+      resp.data.forEach(matchingSong => {
+        searchResultsUl.append(`<li>${matchingSong.songName}</li>`);
+      });
+    });
   }
 
   updateLogo() {
@@ -209,10 +219,9 @@ class UserInterface {
         autoCompleteDiv.css({"visibility": "hidden", "position": "absolute"});
         $(tagElem).css({"visibility": "visible", "position": "relative"})
       })
-      // .on("input", this.initAutoComplete(trackMetadata, tagListUl))
-      .on("input", this.autoComplete.init(trackMetadata.tags, JSON.parse(localStorage.getItem("tags")).tags.map(tag => tag.name),
+      .on("input", this.autoComplete.init(trackMetadata.tags, () => JSON.parse(localStorage.getItem("tags")).tags.map(tag => tag.name),
                 tagListUl, function() {
-                  classRef.motifApi.addTagToSong(localStorage.getItem("userId"), this.value, trackMetadata.id)
+                  classRef.motifApi.addTagToSong(localStorage.getItem("userId"), this.value, trackMetadata.id, trackMetadata.name)
                     .then(resp => { // TODO change up error handling? 
                       if (resp.status == "SUCCESS") {
                         classRef.addTagFromChild(this, trackMetadata);
@@ -238,7 +247,7 @@ class UserInterface {
       const matchingTags = tagsToShow.filter(tag => tag.toLowerCase().startsWith(prefix.toLowerCase()));
       matchingTags.forEach(tag => data.append(`<input class='motif-tag-autocomplete-option' type='button' value='${tag}'/>`));
       data.find("input").on("click", function() {
-        classRef.motifApi.addTagToSong(localStorage.getItem("userId"), this.value, trackMetadata.id)
+        classRef.motifApi.addTagToSong(localStorage.getItem("userId"), this.value, trackMetadata.id, trackMetadata.name)
           .then(resp => { // TODO change up error handling? 
             if (resp.status == "SUCCESS") {
               classRef.addTagFromChild(this, trackMetadata);
@@ -273,7 +282,7 @@ class UserInterface {
     if (existingTags.map(s => s.toLowerCase()).indexOf(inputElem.value.toLowerCase()) !== -1) {
       return;
     }
-    this.motifApi.addTagToSong(localStorage.getItem("userId"), inputElem.value, trackMetadata.id)
+    this.motifApi.addTagToSong(localStorage.getItem("userId"), inputElem.value, trackMetadata.id, trackMetadata.name)
       .then(resp => { // TODO change up error handling? 
         if (resp.status == "SUCCESS") {
           this.addTagFromChild(inputElem, trackMetadata);

@@ -37,7 +37,6 @@ class Main {
   }
 
   updateUI(pageInfo: any) {
-    // TODO make this pattern ^ into composition and make each component address a certain page... can trigger based on pageInfo.pageType
     const trackNameToMetadata = pageInfo.trackNameToMetadata;
     this.ui.update(trackNameToMetadata);
     return;

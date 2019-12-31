@@ -24,7 +24,7 @@ router.get('/', (req, res, next) => {
 
 router.post('/tag/add', (req, res, next) => {
   console.log(req.body);
-  if (req.body.songId && req.body.tag && req.body.userId) {
+  if (req.body.songId && req.body.songName && req.body.tag && req.body.userId) {
     Tag.find({
       userId: req.body.userId,
       tag: req.body.tag,
@@ -38,6 +38,7 @@ router.post('/tag/add', (req, res, next) => {
           Song.findOneAndUpdate({
             userId: req.body.userId,
             songId: req.body.songId,
+            songName: req.body.songName,
           },
           {
             $push: { tagIds: tagVal[0]._id },

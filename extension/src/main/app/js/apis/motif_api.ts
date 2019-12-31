@@ -22,6 +22,7 @@ class MotifApi {
             .then(respBody => {
                 Array.from(songNameToIdMap.keys()).forEach((name: any) => toReturn.set(name, {
                     id: songNameToIdMap.get(name), 
+                    name,
                     tags: respBody.data[songNameToIdMap.get(name)] ? respBody.data[songNameToIdMap.get(name)].tags : []
                 }));
 
@@ -50,22 +51,41 @@ class MotifApi {
             });
     }
 
-    addTagToSong(userId: string, tag: string, songId: string): Promise<any> {
-        return this.addOrDeleteTagFromSong(userId, tag, songId);
+    addTagToSong(userId: string, tag: string, songId: string, songName: string): Promise<any> {
+        return this.addOrDeleteTagFromSong(userId, tag, songId, songName);
     }
 
     deleteTagFromSong(userId: string, tag: string, songId: string): Promise<any> {
-        return this.addOrDeleteTagFromSong(userId, tag, songId, true);
+        return this.addOrDeleteTagFromSong(userId, tag, songId, "", true);
     }
 
-    addOrDeleteTagFromSong(userId: string, tag: string, songId: string, isDelete: boolean = false): Promise<any> {
+    addOrDeleteTagFromSong(userId: string, tag: string, songId: string, songName: string, isDelete: boolean = false): Promise<any> {
         const baseUrl = this.baseUrl
         const body = {
             userId,
             tag,
-            songId
+            songId,
+            songName
         }
+
         return fetch(`${baseUrl}/songs/tag/${isDelete ? "delete" : "add"}`, 
+            {
+                "method": "post",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                "body": JSON.stringify(body)
+            })
+            .then(resp => resp.json());
+    }
+
+    executeQuery(userId: string, query: string[]): Promise<any> {
+        const baseUrl = this.baseUrl
+        const body = {
+            userId,
+            query
+        }
+        return fetch(`${baseUrl}/search`, 
             {
                 "method": "post",
                 headers: {
