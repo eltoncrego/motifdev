@@ -25,7 +25,7 @@ router.post('/', (req, res) => {
             songs.forEach((song) => {
                 try {
                     if (songMatches(query, tagIdToNameMap, song)) {
-                        matchingSongs.push({"songId": song.songId, "songName": song.songName});
+                        matchingSongs.push({"songId": song.songId, "songName": song.songName, "artist": song.artist});
                     }
                 } catch (e) {
                     res.status(500).send({ status: 'FAILURE', message: `Failed to parse query ${query}` });

@@ -52,10 +52,10 @@ class UIModListener {
       responseTransform = (pageInfo) => {
             const trackMap = new Map();
             pageInfo.items.map((item: any) => item.track).forEach((track: any) => { 
-              trackMap.set(track.name, track.id);
+              trackMap.set(track.name, {"id": track.id, "artist": track.artists[0].name, "name": track.name});
             });
           return {
-            trackNameToId: trackMap,
+            trackNameToTrack: trackMap,
             pageType: "playlist" 
         } 
       }

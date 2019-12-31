@@ -24,7 +24,7 @@ router.get('/', (req, res, next) => {
 
 router.post('/tag/add', (req, res, next) => {
   console.log(req.body);
-  if (req.body.songId && req.body.songName && req.body.tag && req.body.userId) {
+  if (req.body.songId && req.body.songName && req.body.tag && req.body.userId && req.body.artist) {
     Tag.find({
       userId: req.body.userId,
       tag: req.body.tag,
@@ -39,6 +39,7 @@ router.post('/tag/add', (req, res, next) => {
             userId: req.body.userId,
             songId: req.body.songId,
             songName: req.body.songName,
+            artist: req.body.artist,
           },
           {
             $push: { tagIds: tagVal[0]._id },
@@ -59,6 +60,8 @@ router.post('/tag/add', (req, res, next) => {
         Song.findOneAndUpdate({
           userId: req.body.userId,
           songId: req.body.songId,
+          songName: req.body.songName,
+          artist: req.body.artist,
         },
         {
           $push: { tagIds: tag[0]._id },

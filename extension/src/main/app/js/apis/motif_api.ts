@@ -8,8 +8,8 @@ class MotifApi {
     }
 
     getTagsFromIds(pageInfo: any): Promise<any> {
-        const songNameToIdMap = pageInfo.trackNameToId;
-        const songIds = Array.from(songNameToIdMap.keys()).map((key: any) => songNameToIdMap.get(key)).reduce((a: string, b: string) => a + (a == "" ? b : "," + b), "");
+        const trackNameToTrack = pageInfo.trackNameToTrack;
+        const songIds = Array.from(trackNameToTrack.keys()).map((key: any) => trackNameToTrack.get(key).id).reduce((a: string, b: string) => a + (a == "" ? b : "," + b), "");
         const userId = localStorage.getItem("userId");
         const baseUrl = this.baseUrl;
         var toReturn: any = new Map();
@@ -20,10 +20,9 @@ class MotifApi {
             })
             .then(resp => resp.json())
             .then(respBody => {
-                Array.from(songNameToIdMap.keys()).forEach((name: any) => toReturn.set(name, {
-                    id: songNameToIdMap.get(name), 
-                    name,
-                    tags: respBody.data[songNameToIdMap.get(name)] ? respBody.data[songNameToIdMap.get(name)].tags : []
+                Array.from(trackNameToTrack.keys()).forEach((name: any) => toReturn.set(name, {
+                    tags: respBody.data[trackNameToTrack.get(name).id] ? respBody.data[trackNameToTrack.get(name).id].tags : [],
+                    ...trackNameToTrack.get(name)
                 }));
 
                 return {
@@ -51,21 +50,22 @@ class MotifApi {
             });
     }
 
-    addTagToSong(userId: string, tag: string, songId: string, songName: string): Promise<any> {
-        return this.addOrDeleteTagFromSong(userId, tag, songId, songName);
+    addTagToSong(userId: string, tag: string, songId: string, songName: string, artist: string): Promise<any> {
+        return this.addOrDeleteTagFromSong(userId, tag, songId, songName, artist);
     }
 
     deleteTagFromSong(userId: string, tag: string, songId: string): Promise<any> {
-        return this.addOrDeleteTagFromSong(userId, tag, songId, "", true);
+        return this.addOrDeleteTagFromSong(userId, tag, songId, "", "", true);
     }
 
-    addOrDeleteTagFromSong(userId: string, tag: string, songId: string, songName: string, isDelete: boolean = false): Promise<any> {
+    addOrDeleteTagFromSong(userId: string, tag: string, songId: string, songName: string, artist: string, isDelete: boolean = false): Promise<any> {
         const baseUrl = this.baseUrl
         const body = {
             userId,
             tag,
             songId,
-            songName
+            songName,
+            artist
         }
 
         return fetch(`${baseUrl}/songs/tag/${isDelete ? "delete" : "add"}`, 
