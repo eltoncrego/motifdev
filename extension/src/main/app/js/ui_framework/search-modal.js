@@ -52,7 +52,7 @@ class SearchModal {
                     }).on("click", function() {
                         var p = $(this);
                         while (p.attr("class") !== "motif-taglist-songtag") {
-                        p = p.parent();
+                            p = p.parent();
                         }
                         const tag = p.find("span").html();
                         chosenTags.splice(chosenTags.indexOf(tag), 1);
@@ -148,15 +148,16 @@ class SearchModal {
 
         // TODO set up onclick for continue / cancel here... make sure it's not a nested on click
 
-        $(".motif-create-playlist-confirm, motif-cancel")
+        $(".motif-create-playlist-confirm, motif-cancel, motif-continue")
             .on("click", function(e) {
                 if (e.target.className.indexOf("motif-create-playlist-confirm") !== -1 || 
-                        e.target.className.indexOf("motif-cancel") !== -1) {
+                        e.target.className.indexOf("motif-cancel") !== -1 ||
+                        e.target.className.indexOf("motif-continue") !== -1) {
                     $(this).css("display", "none");
                 }
             });
 
-        $(".motif-confirm").on("click", function(e) {
+        $(".motif-continue").on("click", function() {
             classRef.confirmPlaylistCreate();
         });
 
@@ -177,16 +178,16 @@ class SearchModal {
         var text = [];
         $(".motif-search-query > .motif-taglist-songtag").find("span").each((i, e) => text.push(e.textContent));
 
-        this.motifApi.executeQuery(localStorage.getItem("userId"), query).then(resp => {
-            const songIds = resp.data.map(matchingSong.songId);
-            const options = {}
-            let body= {action: SPOTIFY_ACTIONS.ADD_PLAYLIST, options: {}};
+        this.motifApi.executeQuery(localStorage.getItem("userId"), text).then(resp => {
+            const songIds = resp.data.map(songs => songs.songId);
+            const options = {
+                userId: localStorage.getItem("userId"),
+                songIds
+            }
+            let body= {action: SPOTIFY_ACTIONS.ADD_PLAYLIST, options: options};
             // @ts-ignore
-            chrome.runtime.sendMessage(body, (response) => {});
+            chrome.runtime.sendMessage(body, (response) => {console.log(response)});
         });
-
-
-
     }
 }
 

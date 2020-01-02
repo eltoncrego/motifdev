@@ -77,20 +77,40 @@ const api = (url, options = {}) => new Promise((resolve, reject) => {
 });
 
 async function handleAddPlaylist(playlistInfo, callback) {
-  api('/me/playlists', {method: 'get'}).then(console.log)
+  // TODO add pagination for > 100 track playlist 
+  getMotifPlaylistId(playlistInfo.userId).then(playlistId => {
+    const body = {
+      uris: playlistInfo.songIds.map(songId => `spotify:track:${songId}`)
+    }
+    api(`/playlists/${playlistId}/tracks`, {
+      method: 'put',
+      body: JSON.stringify(body)
+    }).then(resp => callback({complete: true, ...resp}));
+  });
+}
 
-  // const body = {
-  //   name: playlistInfo.name,
-  //   public: playlistInfo.isPublic || false,
-  //   collaborative: playlistInfo.isCollaborative || false,
-  //   songs: playlistInfo.isCollaborative || false,
-  // };
-  // const data = await api(`/users/${playlistInfo.userId}/playlists`,
-  //   {
-  //     method: 'post',
-  //     body: JSON.stringify(body),
-  //   });
-  // callback({complete: true, ...data});
+async function getMotifPlaylistId(userId) {
+  return api('/me/playlists', {method: 'get'}).then((playlists) => {
+    const playlistItems = playlists.items;
+    const motifPlaylistIndex = playlistItems.map(playlist => playlist.name).indexOf("Motif Playlist");
+
+    if (motifPlaylistIndex !== -1) {
+      return new Promise((resolve, reject) => {
+        resolve(playlistItems[motifPlaylistIndex].id);
+      });
+    } else {
+      const body = {
+        name: "Motif Playlist",
+        public: false,
+        collaborative: false,
+      };
+      return api(`/users/${userId}/playlists`,
+        {
+          method: 'post',
+          body: JSON.stringify(body),
+        }).then(playlistMetadata => {return new Promise((resolve, reject) => resolve(playlistMetadata.id))});
+    }
+  });
 }
 
 async function handleGetPlaylistOrAlbumTracks(options, callback) {
