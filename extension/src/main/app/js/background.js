@@ -77,17 +77,20 @@ const api = (url, options = {}) => new Promise((resolve, reject) => {
 });
 
 async function handleAddPlaylist(playlistInfo, callback) {
-  const body = {
-    name: playlistInfo.name,
-    public: playlistInfo.isPublic || false,
-    collaborative: playlistInfo.isCollaborative || false,
-  };
-  const data = await api(`/users/${playlistInfo.userId}/playlists`,
-    {
-      method: 'post',
-      body: JSON.stringify(body),
-    });
-  callback({complete: true, ...data});
+  api('/me/playlists', {method: 'get'}).then(console.log)
+
+  // const body = {
+  //   name: playlistInfo.name,
+  //   public: playlistInfo.isPublic || false,
+  //   collaborative: playlistInfo.isCollaborative || false,
+  //   songs: playlistInfo.isCollaborative || false,
+  // };
+  // const data = await api(`/users/${playlistInfo.userId}/playlists`,
+  //   {
+  //     method: 'post',
+  //     body: JSON.stringify(body),
+  //   });
+  // callback({complete: true, ...data});
 }
 
 async function handleGetPlaylistOrAlbumTracks(options, callback) {

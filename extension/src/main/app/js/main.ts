@@ -1,4 +1,3 @@
-import Applicator from './ui_selection/applicator';
 import ApplicatorProvider from './ui_selection/applicator-provider';
 import UIModListener from './ui_selection/uimod-listener';
 import SPOTIFY_ACTIONS from './constants/spotify_actions';
