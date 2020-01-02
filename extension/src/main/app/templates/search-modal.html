@@ -1,12 +1,12 @@
 <div class="motif-modal motif-playlist-create-modal">
     <div class="motif-search-container-wrapper">
         <div class="motif-search-container">
-            <h1>Playlist Creator</h1>
+            <h1 class="motif-modal-text">Playlist Creator</h1>
             <div class="motif-search-query-container">
                 <ul class="motif-search-query motif-data-items">
                     <li class="motif-autocomplete-search-li">
                         <div class="motif-taglist-autocomplete motif-autocomplete-container motif-autocomplete-search">
-                            <input type="text" autocomplete="false" class="motif-tag-autocomplete-input"/>
+                            <input type="text" autocomplete="false" class="motif-tag-autocomplete-input" placeholder="search for a tag"/>
                             <ul class="motif-tag-autocomplete-data"></ul>
                         </div>
                     </li>
@@ -21,8 +21,10 @@
                 </div>
             </div>
             <div class="motif-search-results-container">
-                <h1>Playlist Demo</h1>
-                <ul class="motif-search-results"></ul>
+                <h2 class="motif-modal-text">Playlist Demo</h2>
+                <ul class="motif-search-results">
+                    <li>You do not have any tags currently selected. Please use the search bar above to create a playlist.</li>
+                </ul>
             </div>
             <div class="motif-search-footer">
                 <button class="motif-create-playlist-btn">Create Playlist</button>

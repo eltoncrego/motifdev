@@ -63,7 +63,7 @@ div.motif-extension-about > .motif-link:hover {
   border-radius: 18px;
   border: none;
   outline: none;
-  padding: 4px 0 4px 10px;
+  padding: 4px 16px;
 }
 
 .motif-tag-autocomplete-data {
@@ -123,7 +123,7 @@ div.motif-extension-about > .motif-link:hover {
   position: fixed;
   flex-direction: row-reverse;
   z-index: 1;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.8);
   align-items: center;
 }
 
@@ -139,6 +139,7 @@ div.motif-extension-about > .motif-link:hover {
 
 .motif-search-modal-inner > h1{
   padding: 30px;
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
 .motif-row {
@@ -212,8 +213,10 @@ div.motif-extension-about > .motif-link:hover {
   margin: 0 auto;
   display: block;
   background-color: #1DB954;
-  padding: 4px 8px;
-  border-radius: 4px;
+  padding: 8px 32px;
+  text-transform: uppercase;
+  font-size: 8pt;
+  border-radius: 32px;
   color: #fff;
   border: none;
 }
@@ -272,10 +275,15 @@ div.motif-extension-about > .motif-link:hover {
 
 #motif-menu-text {
   font-size: 12px;
+  font-weight: 700;
   color: #FFFFFF;
   margin: 0px 8px;
 }
 
 .motif-playlist-create-error {
   color: #B00020;
+}
+
+.motif-modal-text {
+  color: #FFFFFF;
 }

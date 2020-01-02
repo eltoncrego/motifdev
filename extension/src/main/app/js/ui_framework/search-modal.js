@@ -118,10 +118,20 @@ class SearchModal {
         } else {
             searchQueryText.find(".motif-success-icon").css("display", "none");
             searchQueryText.find(".motif-error-icon").css("display", "none");
-            $(".motif-search-results").empty();
+            this.setSearchResultLi();
         }
 
         searchQueryText.find("span").text(text.join(" "));
+    }
+
+    setSearchResultLi(error) {
+        const searchResultsUl = $(".motif-search-results").empty();
+        if (!error) {
+            searchResultsUl.append(`<li>You do not have any tags currently selected. Please use the search bar above to create a playlist.</li>`)
+        } else {
+            searchResultsUl.find(".motif-playlist-create-error").remove();
+            searchResultsUl.append(`<li class='motif-playlist-create-error'>${error}</li>`)
+        }
     }
 
     onValidQuery(query) {
@@ -151,12 +161,12 @@ class SearchModal {
         });
 
         $(".motif-create-playlist-btn").on("click", function() {
-            $(".motif-search-footer").find(".motif-playlist-create-error").remove();
+            $(".motif-search-results-container > .motif-search-results").find(".motif-playlist-create-error").remove();
             var text = [];
             $(".motif-search-query > .motif-taglist-songtag").find("span").each((i, e) => text.push(e.textContent));
             const validityQuery = classRef.queryValidator.validateQuery(text);
             if (!validityQuery.valid) {
-                $(".motif-search-footer").append(`<div class='motif-playlist-create-error'>${validityQuery.error}</div>`)
+                classRef.setSearchResultLi(validityQuery.error);
             } else { 
                 $(".motif-create-playlist-confirm").css("display", "flex")
             }
