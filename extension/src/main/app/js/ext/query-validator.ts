@@ -48,6 +48,11 @@ class QueryValidator {
             return state;
         }
 
+        if (this.isParenthesis(state.lastToken)) {
+            state.error = "Operators cannot directly follow a parenthesis";
+            return state;
+        }
+
         state.lastToken = token;
         return state;
     }

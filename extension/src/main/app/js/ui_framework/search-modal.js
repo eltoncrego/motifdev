@@ -146,8 +146,6 @@ class SearchModal {
     initPlaylistCreate() {
         const classRef = this;
 
-        // TODO set up onclick for continue / cancel here... make sure it's not a nested on click
-
         $(".motif-create-playlist-confirm, motif-cancel, motif-continue")
             .on("click", function(e) {
                 if (e.target.className.indexOf("motif-create-playlist-confirm") !== -1 || 

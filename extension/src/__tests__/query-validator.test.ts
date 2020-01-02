@@ -44,3 +44,7 @@ test('Test early closing paren', () => {
 test('Test starting operator', () => {
     expect(new QueryValidator().validateQuery(["and", "guitar"]).valid).toBe(false);
 }); 
+
+test('Test starting operator', () => {
+    expect(new QueryValidator().validateQuery(["cool", "and", "guitar", "or", "(", "and", "acoustic", ")"]).valid).toBe(false);
+}); 
