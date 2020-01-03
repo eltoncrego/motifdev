@@ -156,6 +156,8 @@ div.motif-extension-about > .motif-link:hover {
   height: 100%;
   background-color: rgba(10, 10, 10, 1);
   display: flex;
+  transition: 300ms transform ease-in-out;
+  transform: translateX(50vw);
 }
 
 .motif-search-container {

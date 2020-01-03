@@ -91,10 +91,16 @@ class SearchModal {
             $(SPOTIFY_CLASSES.MAIN_HEADER).append(response);
             $(".motif-menu-button").on("click", function() {
                 $(".motif-playlist-create-modal").css("display", "flex");
+                setTimeout(() => {
+                    $(".motif-search-container-wrapper").css("transform", "translateX(0vw)");
+                }, 100);
             });
             $(".motif-playlist-create-modal").on("click", function(e) {
                 if (e.target.className.indexOf("motif-playlist-create-modal") !== -1) {
-                    $(this).css("display", "none");
+                    $(".motif-search-container-wrapper").css("transform", "translateX(50vw)");
+                    setTimeout(() => {
+                        $(this).css("display", "none");
+                    }, 200);
                 }
             });
         });
