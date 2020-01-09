@@ -7,6 +7,7 @@ import MotifApi from '../apis/motif_api';
 import SearchModal from './search-modal';
 import AutoComplete from './autocomplete';
 import UIExt from './ui-ext';
+import UISongs from './ui-songs';
 
 class UserInterface {
   constructor() {
@@ -14,6 +15,7 @@ class UserInterface {
     this.autoComplete = new AutoComplete();
     this.searchModal = new SearchModal();
     this.uiExt = new UIExt();
+    this.uiSongs = new UISongs();
   }
 
   init() {
@@ -21,9 +23,11 @@ class UserInterface {
     this.searchModal.initModal();
   }
 
-  update(trackNameToMetadata) {
+  update(trackNameToMetadata, pageType) {
     this.trackNameToMetadata = trackNameToMetadata;
+    this.pageType = pageType;
     this.initTaglists();
+    this.uiSongs.update();
   }
   
   updateLogo() {
@@ -43,7 +47,10 @@ class UserInterface {
   }
 
   initTaglists() {
-    const classRef = this;
+    if (this.pageType !== "album" && this.pageType !== "playlist") {
+      return;
+    }
+
     setTimeout(() => {
       // Limit songs retrieved to avoid dealing with recommended songs (have same selector)
       const tracklistColumns = $(".tracklist").first().find(SPOTIFY_CLASSES.TRACK_CONTEXT_WRAPPER);

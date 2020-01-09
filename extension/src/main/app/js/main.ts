@@ -37,7 +37,8 @@ class Main {
 
   updateUI(pageInfo: any) {
     const trackNameToMetadata = pageInfo.trackNameToMetadata;
-    this.ui.update(trackNameToMetadata);
+    const pageType = pageInfo.pageType;
+    this.ui.update(trackNameToMetadata, pageType);
     return;
   }
 

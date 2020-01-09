@@ -38,7 +38,13 @@ class UIModListener {
 
   // Can't be called before listen
   fire() {
-       this.fetchPageInfo().then((pageInfo: any) => this.motifApi.getTagsFromIds(pageInfo)).then((resp) => this.update(resp)).catch(console.error);
+       this.fetchPageInfo().then((pageInfo: any) => {
+         if (pageInfo.fetchFromMotif) {
+          return this.motifApi.getTagsFromIds(pageInfo)
+         } else {
+           return Promise.resolve(pageInfo);
+         }
+       }).then((resp) => this.update(resp)).catch(console.error);
   }
 
   fetchPageInfo(): Promise<any> {
@@ -50,26 +56,32 @@ class UIModListener {
     if (type === 'playlist') {
       action = SPOTIFY_ACTIONS.GET_PLAYLIST_TRACKS;
       responseTransform = (pageInfo) => {
-            const trackMap = new Map();
-            pageInfo.items.map((item: any) => item.track).forEach((track: any) => { 
-              trackMap.set(track.name, {"id": track.id, "artist": track.artists[0].name, "name": track.name});
-            });
+          const trackMap = new Map();
+          pageInfo.items.map((item: any) => item.track).forEach((track: any) => { 
+            trackMap.set(track.name, {"id": track.id, "artist": track.artists[0].name, "name": track.name});
+          });
           return {
             trackNameToTrack: trackMap,
-            pageType: "playlist" 
+            pageType: "playlist",
+            fetchFromMotif: true
         } 
       }
     } else if (type === 'album') {
       action = SPOTIFY_ACTIONS.GET_ALBUM_TRACKS;
-      responseTransform = (pageInfo) => ( // TODO chnage like above
-        {
-          trackNameToId: pageInfo.items.reduce((currentMap: any, track: any) => {
-            const trackName = track.name;
-            return {
-              ...currentMap, [trackName]: track.id
-            }
-          }, {}),
-          pageType: "album"
+      responseTransform = (pageInfo) => {
+          const trackMap = new Map();
+          pageInfo.items.forEach((track: any) => { 
+            trackMap.set(track.name, {"id": track.id, "artist": track.artists[0].name, "name": track.name});
+          });
+          return {
+            trackNameToTrack: trackMap,
+            pageType: "album",
+            fetchFromMotif: true,
+        } 
+      }
+    } else if (type === 'search') {
+      return new Promise((resolve, reject) => {
+        resolve({trackNameToMetadata: {}, pageType: "search", fetchFromMotif: false});
       });
     } else {
       console.log(`Fetching page type ${type} currently not supported.`);

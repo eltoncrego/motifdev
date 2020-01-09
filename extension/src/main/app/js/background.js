@@ -114,7 +114,7 @@ async function getMotifPlaylistId(userId) {
 }
 
 async function handleGetPlaylistOrAlbumTracks(options, callback) {
-  const data = await api(`/${options.type}/${options.id}/tracks`,
+  const data = await api(`/${options.type}/${options.id}/tracks${options.type === "albums" ? '?limit=50' : ''}`,
     {
       method: 'get',
     });
