@@ -7,7 +7,8 @@ import MotifApi from '../apis/motif_api';
 import SearchModal from './search-modal';
 import AutoComplete from './autocomplete';
 import UIExt from './ui-ext';
-import UISongs from './ui-songs';
+import { formatAsHTMLClass } from '../ext/helpers';
+// import UISongs from './ui-songs';
 
 class UserInterface {
   constructor() {
@@ -56,18 +57,12 @@ class UserInterface {
       const tracklistColumns = $(".tracklist").first().find(SPOTIFY_CLASSES.TRACK_CONTEXT_WRAPPER);
       const classRef = this;
       new HtmlLoader(FILEPATHS.TAG_LIST_HTML).getHtml().then((tagListDivString) => {
-        if (tracklistColumns.length > 0 && tracklistColumns.find(MOTIF_CLASSES.TAGLIST_CLASS).length === 0) {
+        if (tracklistColumns.length > 0 && tracklistColumns.find(MOTIF_CLASSES.TAGLIST).length === 0) {
           const spotifyUITracks = $(SPOTIFY_CLASSES.TRACK);
           spotifyUITracks.css('transition', 'opacity 300ms ease-in-out');
           spotifyUITracks.css('opacity', '0'); 
-          // PROCESS SHOULD BE AS FOLLOWS
-          // 1. load html as string
-          // 2. add in parameterized information... e.g song tags to a text version of the html
-          // 3. convert string to html
-          // 4. add in the right callbacks 
           setTimeout(() => {
             tracklistColumns.append(function(index) { 
-              // We're relying on the fact that the order of songs in playlist view should be the same as that returned by api
               const trackMetadata = classRef.trackNameToMetadata.get(Array.from(classRef.trackNameToMetadata.keys())[index]);
               let tagsText = "";
               trackMetadata.tags.forEach(tag => {
@@ -75,17 +70,17 @@ class UserInterface {
               });
               const elem = $.parseHTML(tagListDivString.replace("{content}", tagsText))[0] // todo make into a smarter regex... e.g strip whitespace
 
-              $(elem).find(".motif-tag-delete-container").on("hover", function() {
-                $(this).find(".motif-tag-delete").hover();
+              $(elem).find(MOTIF_CLASSES.DELETE_CONTAINER).on("hover", function() {
+                $(this).find(MOTIF_CLASSES.DELETE).hover();
               }).on("click", function() {classRef.handleDelete(this, trackMetadata)});
               return elem;
             });
 
-            $(MOTIF_CLASSES.TAGLIST_CLASS).css('opacity', '1')
+            $(MOTIF_CLASSES.TAGLIST).css('opacity', '1')
             spotifyUITracks.css('opacity', '1');
 
-            $(".motif-taglist-addTag").on("click", function() {
-              const index = $(".motif-taglist-addTag").index(this);
+            $(MOTIF_CLASSES.ADD_TAG).on("click", function() {
+              const index = $(MOTIF_CLASSES.ADD_TAG).index(this);
               const trackMetadata = classRef.trackNameToMetadata.get(Array.from(classRef.trackNameToMetadata.keys())[index]);
               classRef.showAutoComplete(this, trackMetadata, $(this).parent());
             });
@@ -96,21 +91,21 @@ class UserInterface {
   }
   
   showAutoComplete(tagElem, trackMetadata, tagListUl) {
-    const autoCompleteDiv = $(tagElem).parent().find(".motif-taglist-autocomplete");
+    const autoCompleteDiv = $(tagElem).parent().find(MOTIF_CLASSES.AUTOCOMPLETE);
     autoCompleteDiv.css({"visibility": "visible", "position": "relative"});
     $(tagElem).css({"visibility": "hidden", "position": "absolute"});
     const classRef = this;
 
-    autoCompleteDiv.find(".motif-tag-autocomplete-input")
+    autoCompleteDiv.find(MOTIF_CLASSES.AUTOCOMPLETE_INPUT)
       .off() 
       .focus()
       .blur(function(e) {
         this.value = ''; 
         // ignore blur and let option on click handle this
-        if (e.relatedTarget && e.relatedTarget.getAttribute("class") === 'motif-tag-autocomplete-option') { 
+        if (e.relatedTarget && e.relatedTarget.getAttribute("class") === MOTIF_CLASSES.AUTOCOMPLETE_OPTION) { 
           return;
         }
-        tagListUl.find(".motif-tag-autocomplete-data").empty();
+        tagListUl.find(MOTIF_CLASSES.AUTOCOMPLETE_DATA).empty();
         autoCompleteDiv.css({"visibility": "hidden", "position": "absolute"});
         $(tagElem).css({"visibility": "visible", "position": "relative"})
       })
@@ -133,14 +128,14 @@ class UserInterface {
     const tagsToShow = availableTags.filter(tagName => existingTags.indexOf(tagName) === -1);
     const classRef = this;
     return function onInputChange() {
-      const data = tagListUl.find(".motif-tag-autocomplete-data");
+      const data = tagListUl.find(MOTIF_CLASSES.AUTOCOMPLETE_DATA);
       data.empty();
       const prefix = this.value;
       if (prefix === "") {
         return;
       }
       const matchingTags = tagsToShow.filter(tag => tag.toLowerCase().startsWith(prefix.toLowerCase()));
-      matchingTags.forEach(tag => data.append(`<input class='motif-tag-autocomplete-option' type='button' value='${tag}'/>`));
+      matchingTags.forEach(tag => data.append(`<input class='${formatAsHTMLClass(MOTIF_CLASSES.AUTOCOMPLETE_OPTION)}' type='button' value='${tag}'/>`));
       data.find("input").on("click", function() {
         classRef.motifApi.addTagToSong(localStorage.getItem("userId"), this.value, trackMetadata.id, trackMetadata.name, trackMetadata.artist)
           .then(resp => { // TODO change up error handling? 
@@ -157,19 +152,19 @@ class UserInterface {
     const existingTags = trackMetadata.tags;
     existingTags.push(childElem.value);
     var p = $(childElem);
-    while (p.attr("class") !== "motif-taglist") {
+    while (p.attr("class") !== MOTIF_CLASSES.TAGLIST) {
       p = p.parent();
     }
-    p.find(".motif-taglist-addTag")
+    p.find(MOTIF_CLASSES.ADD_TAG)
       .css({"visibility": "visible", "position": "relative"})
       .before(() => this.uiExt.buildTagDiv(childElem.value)); 
 
-    p.find(".motif-tag-delete-container").on("hover", function() {
-      $(this).find(".motif-tag-delete").hover();
+    p.find(MOTIF_CLASSES.DELETE_CONTAINER).on("hover", function() {
+      $(this).find(MOTIF_CLASSES.DELETE).hover();
     }).on("click", function() {classRef.handleDelete(this, trackMetadata)});
 
-    p.find(".motif-tag-autocomplete-data").empty();
-    p.find(".motif-taglist-autocomplete").css({"visibility": "hidden", "position": "absolute"});
+    p.find(MOTIF_CLASSES.AUTOCOMPLETE_DATA).empty();
+    p.find(MOTIF_CLASSES.AUTOCOMPLETE).css({"visibility": "hidden", "position": "absolute"});
   }
 
   handleEnter(inputElem, trackMetadata) {
@@ -191,7 +186,7 @@ class UserInterface {
   handleDelete(toDelElem, trackMetadata) { 
     const existingTags = trackMetadata.tags;
     var p = $(toDelElem);
-    while (p.attr("class") !== "motif-taglist-songtag") {
+    while (p.attr("class") !== MOTIF_CLASSES.SONGTAG) {
       p = p.parent();
     }
     const tag = p.find("span").html();

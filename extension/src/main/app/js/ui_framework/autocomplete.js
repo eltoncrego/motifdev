@@ -1,3 +1,5 @@
+import MOTIF_CLASSES from "../constants/motif_classes";
+import { formatAsHTMLClass } from "../ext/helpers";
 
 class AutoComplete {
     constructor() {}
@@ -6,14 +8,14 @@ class AutoComplete {
         // TODO make this more efficient? 
         return function onInputChange() {
             const dataToShow = availableDataGetter().filter(datum => existingData.indexOf(datum) === -1);
-            const data = containingElement.find(".motif-tag-autocomplete-data");
+            const data = containingElement.find(MOTIF_CLASSES.AUTOCOMPLETE_DATA);
             data.empty();
             const prefix = this.value;
             if (prefix === "") {
                 return;
             }
             const matchingData = dataToShow.filter(datum => datum.toLowerCase().startsWith(prefix.toLowerCase()));
-            matchingData.forEach(datum => data.append(`<input class='motif-tag-autocomplete-option' type='button' value='${datum}'/>`));
+            matchingData.forEach(datum => data.append(`<input class='${formatAsHTMLClass(MOTIF_CLASSES.AUTOCOMPLETE_OPTION)}' type='button' value='${datum}'/>`));
             data.find("input").on("click", selectionCallback);
         }
     }

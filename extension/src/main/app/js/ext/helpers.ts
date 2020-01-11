@@ -3,4 +3,8 @@ function normalizeSpotifyName(name: string) {
     return name.replace(regex, "").toLowerCase();
 }
 
-export { normalizeSpotifyName }
+function formatAsHTMLClass(className: string) {
+    return className.replace(/\./g, '');
+}
+
+export { normalizeSpotifyName, formatAsHTMLClass }
