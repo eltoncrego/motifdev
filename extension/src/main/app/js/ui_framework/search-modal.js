@@ -39,7 +39,7 @@ class SearchModal {
                 .blur(function(e) {
                     this.value = ''; 
                     // ignore blur and let option on click handle this
-                    if (e.relatedTarget && e.relatedTarget.getAttribute("class") === MOTIF_CLASSES.AUTOCOMPLETE_OPTION) { 
+                    if (e.relatedTarget && e.relatedTarget.getAttribute("class") === formatAsHTMLClass(MOTIF_CLASSES.AUTOCOMPLETE_OPTION)) { 
                         return;
                     }
                     container.find(MOTIF_CLASSES.AUTOCOMPLETE_DATA).empty();
@@ -53,7 +53,7 @@ class SearchModal {
                         $(this).find(MOTIF_CLASSES.DELETE).hover();
                     }).on("click", function() {
                         var p = $(this);
-                        while (p.attr("class") !== MOTIF_CLASSES.SONGTAG) {
+                        while (p.attr("class") !== formatAsHTMLClass(MOTIF_CLASSES.SONGTAG)) {
                             p = p.parent();
                         }
                         const tag = p.find("span").html();
@@ -77,7 +77,7 @@ class SearchModal {
                     $(this).find(MOTIF_CLASSES.DELETE).hover();
                     }).on("click", function() {
                         var p = $(this);
-                        while (p.attr("class") !== MOTIF_CLASSES.SONGTAG) {
+                        while (p.attr("class") !== formatAsHTMLClass(MOTIF_CLASSES.SONGTAG)) {
                             p = p.parent();
                         }
                         p.remove()
@@ -98,7 +98,7 @@ class SearchModal {
                 }, 100);
             });
             $(MOTIF_CLASSES.PLAYLIST_CREATE_MODAL).on("click", function(e) {
-                if (e.target.className.indexOf(MOTIF_CLASSES.PLAYLIST_CREATE_MODAL) !== -1) {
+                if (e.target.className.indexOf(formatAsHTMLClass(MOTIF_CLASSES.PLAYLIST_CREATE_MODAL)) !== -1) {
                     $(MOTIF_CLASSES.SEARCH_WRAPPER).css("transform", "translateX(50vw)");
                     setTimeout(() => {
                         $(this).css("display", "none");

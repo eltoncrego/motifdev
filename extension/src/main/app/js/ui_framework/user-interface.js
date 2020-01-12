@@ -8,7 +8,7 @@ import SearchModal from './search-modal';
 import AutoComplete from './autocomplete';
 import UIExt from './ui-ext';
 import { formatAsHTMLClass } from '../ext/helpers';
-import UISongs from './ui-songs';
+// import UISongs from './ui-songs';
 
 class UserInterface {
   constructor() {
@@ -16,7 +16,7 @@ class UserInterface {
     this.autoComplete = new AutoComplete();
     this.searchModal = new SearchModal();
     this.uiExt = new UIExt();
-    this.uiSongs = new UISongs();
+    // this.uiSongs = new UISongs();
   }
 
   init() {
@@ -28,7 +28,7 @@ class UserInterface {
     this.trackNameToMetadata = trackNameToMetadata;
     this.pageType = pageType;
     this.initTaglists();
-    this.uiSongs.update();
+    // this.uiSongs.update();
   }
   
   updateLogo() {
@@ -102,7 +102,7 @@ class UserInterface {
       .blur(function(e) {
         this.value = ''; 
         // ignore blur and let option on click handle this
-        if (e.relatedTarget && e.relatedTarget.getAttribute("class") === MOTIF_CLASSES.AUTOCOMPLETE_OPTION) { 
+        if (e.relatedTarget && e.relatedTarget.getAttribute("class") === formatAsHTMLClass(MOTIF_CLASSES.AUTOCOMPLETE_OPTION)) { 
           return;
         }
         tagListUl.find(MOTIF_CLASSES.AUTOCOMPLETE_DATA).empty();
@@ -152,7 +152,7 @@ class UserInterface {
     const existingTags = trackMetadata.tags;
     existingTags.push(childElem.value);
     var p = $(childElem);
-    while (p.attr("class") !== MOTIF_CLASSES.TAGLIST) {
+    while (p.attr("class") !== formatAsHTMLClass(MOTIF_CLASSES.TAGLIST)) {
       p = p.parent();
     }
     p.find(MOTIF_CLASSES.ADD_TAG)
@@ -186,7 +186,7 @@ class UserInterface {
   handleDelete(toDelElem, trackMetadata) { 
     const existingTags = trackMetadata.tags;
     var p = $(toDelElem);
-    while (p.attr("class") !== MOTIF_CLASSES.SONGTAG) {
+    while (p.attr("class") !== formatAsHTMLClass(MOTIF_CLASSES.SONGTAG)) {
       p = p.parent();
     }
     const tag = p.find("span").html();
