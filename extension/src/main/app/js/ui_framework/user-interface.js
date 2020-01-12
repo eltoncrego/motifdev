@@ -8,7 +8,7 @@ import SearchModal from './search-modal';
 import AutoComplete from './autocomplete';
 import UIExt from './ui-ext';
 import { formatAsHTMLClass } from '../ext/helpers';
-// import UISongs from './ui-songs';
+import UISongs from './ui-songs';
 
 class UserInterface {
   constructor() {

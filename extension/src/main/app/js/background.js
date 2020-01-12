@@ -66,8 +66,11 @@ const api = (url, options = {}) => new Promise((resolve, reject) => {
       .then((response) => response.json().then((data) => {
         if (data.error) {
           if (data.error.status === 401) {
-            authorize();
-            return api(url, options); // todo add retries... would this ever infinite loop?
+            return authorize().then(() => {
+              return api(url, options);
+            }).catch((err) => {
+              console.log("Motif error: cannot authorize spotify user");
+            });
           }
           return reject(data);
         }
