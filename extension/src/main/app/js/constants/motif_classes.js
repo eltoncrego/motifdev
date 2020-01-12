@@ -1,32 +1,8 @@
 const MOTIF_CLASSES = {
-  MAIN_LOGO_ID: '.motif-spotify-logo-main',
-  MENU_BUTTON: '.motif-menu-button',
-  TAGLIST: '.motif-taglist',
-  SONGTAG: '.motif-taglist-songtag',
-  DELETE_CONTAINER: '.motif-tag-delete-container',
-  DELETE: '.motif-tag-delete',
-  ADD_TAG: '.motif-taglist-addTag',
-  AUTOCOMPLETE: '.motif-taglist-autocomplete',
-  AUTOCOMPLETE_INPUT: '.motif-tag-autocomplete-input',
-  AUTOCOMPLETE_OPTION: '.motif-tag-autocomplete-option',
-  AUTOCOMPLETE_DATA: '.motif-tag-autocomplete-data',
-  SEARCH_CONTAINER: '.motif-search-container',
-  SEARCH_WRAPPER: '.motif-search-container-wrapper',
-  SEARCH: '.motif-search-query',
-  SEARCH_TEXT: '.motif-search-query-text',
-  SEARCH_LI: '.motif-autocomplete-search-li',
-  SEARCH_RESULTS: '.motif-search-results',
-  SEARCH_RESULTS_CONTAINER: '.motif-search-results-container',
-  ERROR_ICON_CONTAINER: '.motif-error-icon-container',
-  SUCCESS_ICON: '.motif-success-icon',
-  ERROR_ICON: '.motif-error-icon',
-  ERROR_TOOLTIP: '.motif-error-tooltip',
-  PLAYLIST_CREATE_MODAL: '.motif-playlist-create-modal',
-  PLAYLIST_CREATE_BTN: '.motif-create-playlist-btn',
-  PLAYLIST_CREATE_ERROR: '.motif-playlist-create-error',
-  PLAYLIST_CREATE_CONFIRM: '.motif-create-playlist-confirm',
-  CANCEL: 'motif-cancel',
-  CONTINUE: 'motif-continue',
+  // our replacement for the spotify logo
+  MAIN_LOGO_ID: 'motif-spotify-logo-main',
+  // our taglist class
+  TAGLIST_CLASS: '.motif-taglist',
 };
 
 export default MOTIF_CLASSES;
