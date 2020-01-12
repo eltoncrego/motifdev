@@ -72,3 +72,58 @@
   height: 8px;
   width: auto;
 }
+
+.motif-loader-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  background: #000000;
+  border-radius: 16px;
+  height: 34px;
+  margin-left: 8px;
+  box-shadow: 0 2px 4px 0 rgba(0,0,0,.5);
+}
+
+.motif-menu-text {
+  font-size: 12px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin: 0px 8px;
+}
+
+.motif-loader {
+  display: inline-block;
+  position: relative;
+  width: 14px;
+  height: 14px;
+}
+
+.motif-loader div {
+  box-sizing: border-box;
+  display: block;
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border: 2px solid #1DB954;
+  border-radius: 50%;
+  animation: motif-loader 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  border-color: #1DB954 transparent transparent transparent;
+}
+.motif-loader div:nth-child(1) {
+  animation-delay: -0.45s;
+}
+.motif-loader div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.motif-loader div:nth-child(3) {
+  animation-delay: -0.15s;
+}
+@keyframes motif-loader {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

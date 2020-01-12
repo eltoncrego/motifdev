@@ -3,6 +3,7 @@ const FILEPATHS = {
   MENU_LOGO: 'assets/img/tags-icon-menu.svg',
   TAG_LIST_HTML: 'templates/tag-list.html',
   SEARCH_MODAL: 'templates/search-modal.html',
+  LOADER: 'templates/taglist-loader.html'
 };
 
 export default FILEPATHS;

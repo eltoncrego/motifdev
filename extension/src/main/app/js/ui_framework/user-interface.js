@@ -20,8 +20,13 @@ class UserInterface {
   }
 
   init() {
+    new HtmlLoader(FILEPATHS.LOADER).getHtml().then((response) => {
+      $(SPOTIFY_CLASSES.MAIN_HEADER).append(response);
+      $(MOTIF_CLASSES.LOADER_TEXT).text("Loading Motif Interface");
+    });
     this.updateLogo();
     this.searchModal.initModal();
+    $(MOTIF_CLASSES.LOADER).remove();
   }
 
   update(trackNameToMetadata, pageType) {
@@ -52,6 +57,10 @@ class UserInterface {
       return;
     }
 
+    new HtmlLoader(FILEPATHS.LOADER).getHtml().then((response) => {
+      $(SPOTIFY_CLASSES.MAIN_HEADER).append(response);
+    });
+
     setTimeout(() => {
       // Limit songs retrieved to avoid dealing with recommended songs (have same selector)
       const tracklistColumns = $(".tracklist").first().find(SPOTIFY_CLASSES.TRACK_CONTEXT_WRAPPER);
@@ -67,10 +76,10 @@ class UserInterface {
               let tagsText = "";
               if (trackMetadata) {
                 trackMetadata.tags.forEach(tag => {
-                  tagsText += classRef.uiExt.buildTagDiv(tag); // TODO need onclicks for this to remove
+                  tagsText += classRef.uiExt.buildTagDiv(tag);
                 });
               }
-              const elem = $.parseHTML(tagListDivString.replace("{content}", tagsText))[0] // todo make into a smarter regex... e.g strip whitespace
+              const elem = $.parseHTML(tagListDivString.replace("{content}", tagsText))[0]
 
               $(elem).find(MOTIF_CLASSES.DELETE_CONTAINER).on("hover", function() {
                 $(this).find(MOTIF_CLASSES.DELETE).hover();
@@ -89,6 +98,7 @@ class UserInterface {
           }, 1000);
         }
       });
+      $(MOTIF_CLASSES.LOADER).remove();
     }, 300);
   }
   

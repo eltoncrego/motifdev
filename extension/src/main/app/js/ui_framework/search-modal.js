@@ -35,16 +35,14 @@ class SearchModal {
             const container = $(MOTIF_CLASSES.SEARCH_CONTAINER);
             const chosenTags = [];
 
-            container.find(MOTIF_CLASSES.AUTOCOMPLETE_INPUT)
-                .blur(function(e) {
-                    this.value = ''; 
-                    // ignore blur and let option on click handle this
-                    if (e.relatedTarget && e.relatedTarget.getAttribute("class") === formatAsHTMLClass(MOTIF_CLASSES.AUTOCOMPLETE_OPTION)) { 
-                        return;
-                    }
-                    container.find(MOTIF_CLASSES.AUTOCOMPLETE_DATA).empty();
-                    })
-                .on("input", this.autoComplete.init(chosenTags, () => JSON.parse(localStorage.getItem("tags")).tags.map(tag => tag.name), container, 
+            container.find(MOTIF_CLASSES.AUTOCOMPLETE_INPUT).blur(function(e) {
+                this.value = ''; 
+                // ignore blur and let option on click handle this
+                if (e.relatedTarget && e.relatedTarget.getAttribute("class") === formatAsHTMLClass(MOTIF_CLASSES.AUTOCOMPLETE_OPTION)) { 
+                    return;
+                }
+                container.find(MOTIF_CLASSES.AUTOCOMPLETE_DATA).empty();
+            }).on("input", this.autoComplete.init(chosenTags, () => JSON.parse(localStorage.getItem("tags")).tags.map(tag => tag.name), container, 
                 function() {
                     container.find(MOTIF_CLASSES.SEARCH_LI).before(classRef.uiExt.buildTagDiv(this.value));
                     chosenTags.push(this.value)
@@ -63,31 +61,30 @@ class SearchModal {
                     });
 
                     classRef.updateModalSearchText();
-                }))
-                .on("keypress", function(e) {
-                if(e.which !== 13) {
-                    return;
-                }  
-                const operators = ["and", "or", "(", ")"];
-                
-                if (operators.indexOf(this.value) !== -1) {
-                    container.find(MOTIF_CLASSES.SEARCH_LI).before(classRef.uiExt.buildTagDiv(this.value, true));
-                    container.find(MOTIF_CLASSES.AUTOCOMPLETE_DATA).empty();
-                    container.find(MOTIF_CLASSES.DELETE_CONTAINER).on("hover", function() {
-                    $(this).find(MOTIF_CLASSES.DELETE).hover();
-                    }).on("click", function() {
-                        var p = $(this);
-                        while (p.attr("class") !== formatAsHTMLClass(MOTIF_CLASSES.SONGTAG)) {
-                            p = p.parent();
-                        }
-                        p.remove()
+                })).on("keypress", function(e) {
+                    if(e.which !== 13) {
+                        return;
+                    }  
+                    const operators = ["and", "or", "(", ")"];
+                    
+                    if (operators.indexOf(this.value) !== -1) {
+                        container.find(MOTIF_CLASSES.SEARCH_LI).before(classRef.uiExt.buildTagDiv(this.value, true));
+                        container.find(MOTIF_CLASSES.AUTOCOMPLETE_DATA).empty();
+                        container.find(MOTIF_CLASSES.DELETE_CONTAINER).on("hover", function() {
+                        $(this).find(MOTIF_CLASSES.DELETE).hover();
+                        }).on("click", function() {
+                            var p = $(this);
+                            while (p.attr("class") !== formatAsHTMLClass(MOTIF_CLASSES.SONGTAG)) {
+                                p = p.parent();
+                            }
+                            p.remove()
+                            classRef.updateModalSearchText();
+                        });
+                        container.find(MOTIF_CLASSES.AUTOCOMPLETE_INPUT)[0].value = "";
                         classRef.updateModalSearchText();
-                    });
-                    container.find(MOTIF_CLASSES.AUTOCOMPLETE_INPUT)[0].value = "";
-                    classRef.updateModalSearchText();
-                }
+                    }
                 }); 
-            });
+        });
 
         new HtmlLoader(FILEPATHS.MENU_LOGO).getHtml().then((response) => {
             $(SPOTIFY_CLASSES.MAIN_HEADER).append(response);
@@ -154,7 +151,7 @@ class SearchModal {
     initPlaylistCreate() {
         const classRef = this;
 
-        $(MOTIF_CLASSES.PLAYLIST_CREATE_CONFIRM + ", " + MOTIF_CLASSES.CANCEL + ", " + MOTIF_CLASSES.CONTINUE)
+        $(MOTIF_CLASSES.PLAYLIST_CREATE_CONFIRM + ", " + formatAsHTMLClass(MOTIF_CLASSES.CANCEL) + ", " + formatAsHTMLClass(MOTIF_CLASSES.CONTINUE))
             .on("click", function(e) {
                 if (e.target.className.indexOf(formatAsHTMLClass(MOTIF_CLASSES.PLAYLIST_CREATE_CONFIRM)) !== -1 || 
                         e.target.className.indexOf(formatAsHTMLClass(MOTIF_CLASSES.CANCEL)) !== -1 ||

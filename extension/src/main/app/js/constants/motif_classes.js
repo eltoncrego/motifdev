@@ -25,8 +25,10 @@ const MOTIF_CLASSES = {
   PLAYLIST_CREATE_BTN: '.motif-create-playlist-btn',
   PLAYLIST_CREATE_ERROR: '.motif-playlist-create-error',
   PLAYLIST_CREATE_CONFIRM: '.motif-create-playlist-confirm',
-  CANCEL: 'motif-cancel',
-  CONTINUE: 'motif-continue',
+  CANCEL: '.motif-cancel',
+  CONTINUE: '.motif-continue',
+  LOADER_TEXT: '.motif-menu-text',
+  LOADER: '.motif-loader-container',
 };
 
 export default MOTIF_CLASSES;

@@ -35,6 +35,7 @@
         "assets/img/main-logo.svg", 
         "assets/img/tags-icon-menu.svg", 
         "templates/tag-list.html",
-        "templates/search-modal.html"
+        "templates/search-modal.html",
+        "templates/taglist-loader.html"
     ]
 }
