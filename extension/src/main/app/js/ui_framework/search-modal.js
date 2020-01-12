@@ -7,6 +7,8 @@ import AutoComplete from './autocomplete';
 import SPOTIFY_CLASSES from '../constants/spotify_classes';
 import FILEPATHS from '../constants/filepaths';
 import SPOTIFY_ACTIONS from '../constants/spotify_actions';
+import MOTIF_CLASSES from '../constants/motif_classes';
+import { formatAsHTMLClass } from '../ext/helpers';
 
 class SearchModal {
     constructor() {
@@ -22,36 +24,36 @@ class SearchModal {
             $("body").append(response);
 
             // Initial stuff
-            $(".motif-search-query-text").find(".motif-error-icon-container").on("mouseenter", function() {
-                $(this).find(".motif-error-tooltip").css("display", "block");
+            $(MOTIF_CLASSES.SEARCH_TEXT).find(MOTIF_CLASSES.ERROR_ICON_CONTAINER).on("mouseenter", function() {
+                $(this).find(MOTIF_CLASSES.ERROR_TOOLTIP).css("display", "block");
             }).on("mouseleave", function() {
-                $(this).find(".motif-error-tooltip").css("display", "none");
+                $(this).find(MOTIF_CLASSES.ERROR_TOOLTIP).css("display", "none");
             });
 
             this.initPlaylistCreate();
 
-            const container = $(".motif-search-container");
+            const container = $(MOTIF_CLASSES.SEARCH_CONTAINER);
             const chosenTags = [];
 
-            container.find(".motif-tag-autocomplete-input")
+            container.find(MOTIF_CLASSES.AUTOCOMPLETE_INPUT)
                 .blur(function(e) {
                     this.value = ''; 
                     // ignore blur and let option on click handle this
-                    if (e.relatedTarget && e.relatedTarget.getAttribute("class") === 'motif-tag-autocomplete-option') { 
+                    if (e.relatedTarget && e.relatedTarget.getAttribute("class") === MOTIF_CLASSES.AUTOCOMPLETE_OPTION) { 
                         return;
                     }
-                    container.find(".motif-tag-autocomplete-data").empty();
+                    container.find(MOTIF_CLASSES.AUTOCOMPLETE_DATA).empty();
                     })
                 .on("input", this.autoComplete.init(chosenTags, () => JSON.parse(localStorage.getItem("tags")).tags.map(tag => tag.name), container, 
                 function() {
-                    container.find(".motif-autocomplete-search-li").before(classRef.uiExt.buildTagDiv(this.value));
+                    container.find(MOTIF_CLASSES.SEARCH_LI).before(classRef.uiExt.buildTagDiv(this.value));
                     chosenTags.push(this.value)
-                    container.find(".motif-tag-autocomplete-data").empty();
-                    container.find(".motif-tag-delete-container").on("hover", function() {
-                        $(this).find(".motif-tag-delete").hover();
+                    container.find(MOTIF_CLASSES.AUTOCOMPLETE_DATA).empty();
+                    container.find(MOTIF_CLASSES.DELETE_CONTAINER).on("hover", function() {
+                        $(this).find(MOTIF_CLASSES.DELETE).hover();
                     }).on("click", function() {
                         var p = $(this);
-                        while (p.attr("class") !== "motif-taglist-songtag") {
+                        while (p.attr("class") !== MOTIF_CLASSES.SONGTAG) {
                             p = p.parent();
                         }
                         const tag = p.find("span").html();
@@ -69,19 +71,19 @@ class SearchModal {
                 const operators = ["and", "or", "(", ")"];
                 
                 if (operators.indexOf(this.value) !== -1) {
-                    container.find(".motif-autocomplete-search-li").before(classRef.uiExt.buildTagDiv(this.value, true));
-                    container.find(".motif-tag-autocomplete-data").empty();
-                    container.find(".motif-tag-delete-container").on("hover", function() {
-                    $(this).find(".motif-tag-delete").hover();
+                    container.find(MOTIF_CLASSES.SEARCH_LI).before(classRef.uiExt.buildTagDiv(this.value, true));
+                    container.find(MOTIF_CLASSES.AUTOCOMPLETE_DATA).empty();
+                    container.find(MOTIF_CLASSES.DELETE_CONTAINER).on("hover", function() {
+                    $(this).find(MOTIF_CLASSES.DELETE).hover();
                     }).on("click", function() {
                         var p = $(this);
-                        while (p.attr("class") !== "motif-taglist-songtag") {
+                        while (p.attr("class") !== MOTIF_CLASSES.SONGTAG) {
                             p = p.parent();
                         }
                         p.remove()
                         classRef.updateModalSearchText();
                     });
-                    container.find(".motif-tag-autocomplete-input")[0].value = "";
+                    container.find(MOTIF_CLASSES.AUTOCOMPLETE_INPUT)[0].value = "";
                     classRef.updateModalSearchText();
                 }
                 }); 
@@ -89,15 +91,15 @@ class SearchModal {
 
         new HtmlLoader(FILEPATHS.MENU_LOGO).getHtml().then((response) => {
             $(SPOTIFY_CLASSES.MAIN_HEADER).append(response);
-            $(".motif-menu-button").on("click", function() {
-                $(".motif-playlist-create-modal").css("display", "flex");
+            $(MOTIF_CLASSES.MENU_BUTTON).on("click", function() {
+                $(MOTIF_CLASSES.PLAYLIST_CREATE_MODAL).css("display", "flex");
                 setTimeout(() => {
-                    $(".motif-search-container-wrapper").css("transform", "translateX(0vw)");
+                    $(MOTIF_CLASSES.SEARCH_WRAPPER).css("transform", "translateX(0vw)");
                 }, 100);
             });
-            $(".motif-playlist-create-modal").on("click", function(e) {
-                if (e.target.className.indexOf("motif-playlist-create-modal") !== -1) {
-                    $(".motif-search-container-wrapper").css("transform", "translateX(50vw)");
+            $(MOTIF_CLASSES.PLAYLIST_CREATE_MODAL).on("click", function(e) {
+                if (e.target.className.indexOf(MOTIF_CLASSES.PLAYLIST_CREATE_MODAL) !== -1) {
+                    $(MOTIF_CLASSES.SEARCH_WRAPPER).css("transform", "translateX(50vw)");
                     setTimeout(() => {
                         $(this).css("display", "none");
                     }, 200);
@@ -108,22 +110,22 @@ class SearchModal {
 
     updateModalSearchText() {
         var text = [];
-        $(".motif-search-query > .motif-taglist-songtag").find("span").each((i, e) => text.push(e.textContent));
-        const searchQueryText = $(".motif-search-query-text")
+        $(MOTIF_CLASSES.SEARCH + " > " + MOTIF_CLASSES.SONGTAG).find("span").each((i, e) => text.push(e.textContent));
+        const searchQueryText = $(MOTIF_CLASSES.SEARCH_TEXT)
         if (text.length !== 0) {
             const validityQuery = this.queryValidator.validateQuery(text);
             if (!validityQuery.valid) {
-                searchQueryText.find(".motif-success-icon").css("display", "none");
-                searchQueryText.find(".motif-error-icon").css("display", "block");
-                searchQueryText.find(".motif-error-tooltip > div").text(validityQuery.error);
+                searchQueryText.find(MOTIF_CLASSES.SUCCESS_ICON).css("display", "none");
+                searchQueryText.find(MOTIF_CLASSES.ERROR_ICON).css("display", "block");
+                searchQueryText.find(MOTIF_CLASSES.ERROR_TOOLTIP + " > div").text(validityQuery.error);
             } else {
-                searchQueryText.find(".motif-success-icon").css("display", "block");
-                searchQueryText.find(".motif-error-icon").css("display", "none");
+                searchQueryText.find(MOTIF_CLASSES.SUCCESS_ICON).css("display", "block");
+                searchQueryText.find(MOTIF_CLASSES.ERROR_ICON).css("display", "none");
                 this.onValidQuery(text);
             }
         } else {
-            searchQueryText.find(".motif-success-icon").css("display", "none");
-            searchQueryText.find(".motif-error-icon").css("display", "none");
+            searchQueryText.find(MOTIF_CLASSES.SUCCESS_ICON).css("display", "none");
+            searchQueryText.find(MOTIF_CLASSES.ERROR_ICON).css("display", "none");
             this.setSearchResultLi();
         }
 
@@ -131,18 +133,18 @@ class SearchModal {
     }
 
     setSearchResultLi(error) {
-        const searchResultsUl = $(".motif-search-results").empty();
+        const searchResultsUl = $(MOTIF_CLASSES.SEARCH_RESULTS).empty();
         if (!error) {
             searchResultsUl.append(`<li>You do not have any tags currently selected. Please use the search bar above to create a playlist.</li>`)
         } else {
-            searchResultsUl.find(".motif-playlist-create-error").remove();
-            searchResultsUl.append(`<li class='motif-playlist-create-error'>${error}</li>`)
+            searchResultsUl.find(MOTIF_CLASSES.PLAYLIST_CREATE_ERROR).remove();
+            searchResultsUl.append(`<li class='${formatAsHTMLClass(MOTIF_CLASSES.PLAYLIST_CREATE_ERROR)}'>${error}</li>`)
         }
     }
 
     onValidQuery(query) {
         this.motifApi.executeQuery(localStorage.getItem("userId"), query).then(resp => {
-            const searchResultsUl = $(".motif-search-results").empty();
+            const searchResultsUl = $(MOTIF_CLASSES.SEARCH_RESULTS).empty();
             resp.data.forEach(matchingSong => {
                 searchResultsUl.append(`<li>${matchingSong.songName} - ${matchingSong.artist}</li>`);
             });
@@ -152,35 +154,35 @@ class SearchModal {
     initPlaylistCreate() {
         const classRef = this;
 
-        $(".motif-create-playlist-confirm, motif-cancel, motif-continue")
+        $(MOTIF_CLASSES.PLAYLIST_CREATE_CONFIRM + ", " + MOTIF_CLASSES.CANCEL + ", " + MOTIF_CLASSES.CONTINUE)
             .on("click", function(e) {
-                if (e.target.className.indexOf("motif-create-playlist-confirm") !== -1 || 
-                        e.target.className.indexOf("motif-cancel") !== -1 ||
-                        e.target.className.indexOf("motif-continue") !== -1) {
+                if (e.target.className.indexOf(formatAsHTMLClass(MOTIF_CLASSES.PLAYLIST_CREATE_CONFIRM)) !== -1 || 
+                        e.target.className.indexOf(formatAsHTMLClass(MOTIF_CLASSES.CANCEL)) !== -1 ||
+                        e.target.className.indexOf(formatAsHTMLClass(MOTIF_CLASSES.CONTINUE)) !== -1) {
                     $(this).css("display", "none");
                 }
             });
 
-        $(".motif-continue").on("click", function() {
+        $(MOTIF_CLASSES.CONTINUE).on("click", function() {
             classRef.confirmPlaylistCreate();
         });
 
-        $(".motif-create-playlist-btn").on("click", function() {
-            $(".motif-search-results-container > .motif-search-results").find(".motif-playlist-create-error").remove();
+        $(MOTIF_CLASSES.PLAYLIST_CREATE_BTN).on("click", function() {
+            $(MOTIF_CLASSES.SEARCH_RESULTS_CONTAINER + " > " + MOTIF_CLASSES.SEARCH_RESULTS).find(MOTIF_CLASSES.PLAYLIST_CREATE_ERROR).remove();
             var text = [];
-            $(".motif-search-query > .motif-taglist-songtag").find("span").each((i, e) => text.push(e.textContent));
+            $(MOTIF_CLASSES.SEARCH + " > " + MOTIF_CLASSES.SONGTAG).find("span").each((i, e) => text.push(e.textContent));
             const validityQuery = classRef.queryValidator.validateQuery(text);
             if (!validityQuery.valid) {
                 classRef.setSearchResultLi(validityQuery.error);
             } else { 
-                $(".motif-create-playlist-confirm").css("display", "flex")
+                $(MOTIF_CLASSES.PLAYLIST_CREATE_CONFIRM).css("display", "flex")
             }
         });
     }
 
     confirmPlaylistCreate() {
         var text = [];
-        $(".motif-search-query > .motif-taglist-songtag").find("span").each((i, e) => text.push(e.textContent));
+        $(MOTIF_CLASSES.SEARCH + " > " + MOTIF_CLASSES.SONGTAG).find("span").each((i, e) => text.push(e.textContent));
 
         this.motifApi.executeQuery(localStorage.getItem("userId"), text).then(resp => {
             const songIds = resp.data.map(songs => songs.songId);
