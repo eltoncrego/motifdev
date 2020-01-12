@@ -65,9 +65,11 @@ class UserInterface {
             tracklistColumns.append(function(index) { 
               const trackMetadata = classRef.trackNameToMetadata.get(Array.from(classRef.trackNameToMetadata.keys())[index]);
               let tagsText = "";
-              trackMetadata.tags.forEach(tag => {
-                tagsText += classRef.uiExt.buildTagDiv(tag); // TODO need onclicks for this to remove
-              });
+              if (trackMetadata) {
+                trackMetadata.tags.forEach(tag => {
+                  tagsText += classRef.uiExt.buildTagDiv(tag); // TODO need onclicks for this to remove
+                });
+              }
               const elem = $.parseHTML(tagListDivString.replace("{content}", tagsText))[0] // todo make into a smarter regex... e.g strip whitespace
 
               $(elem).find(MOTIF_CLASSES.DELETE_CONTAINER).on("hover", function() {
