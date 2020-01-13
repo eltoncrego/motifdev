@@ -3,6 +3,7 @@ const MOTIF_CLASSES = {
   MENU_BUTTON: '.motif-menu-button',
   TAGLIST: '.motif-taglist',
   SONGTAG: '.motif-taglist-songtag',
+  TAG: '.motif-tag-song',
   DELETE_CONTAINER: '.motif-tag-delete-container',
   DELETE: '.motif-tag-delete',
   ADD_TAG: '.motif-taglist-addTag',

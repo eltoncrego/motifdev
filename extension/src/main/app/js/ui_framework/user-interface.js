@@ -79,7 +79,19 @@ class UserInterface {
                   tagsText += classRef.uiExt.buildTagDiv(tag);
                 });
               }
-              const elem = $.parseHTML(tagListDivString.replace("{content}", tagsText))[0]
+              const elem = $.parseHTML(tagListDivString.replace("{content}", tagsText))[0];
+              $(elem).find(MOTIF_CLASSES.TAG).find('span').css('display', 'none');
+              $(elem).find(MOTIF_CLASSES.ADD_TAG).find('span, svg').css('display', 'none');
+              $(elem).find(MOTIF_CLASSES.DELETE_CONTAINER).css('display', 'none');
+              $(elem).hover(function() {
+                $(this).find(MOTIF_CLASSES.TAG).find('span').css('display', 'inline');
+                $(this).find(MOTIF_CLASSES.ADD_TAG).find('span, svg').css('display', 'inline');
+                $(this).find(MOTIF_CLASSES.DELETE_CONTAINER).css('display', 'flex');
+              }, function() {
+                $(this).find(MOTIF_CLASSES.TAG).find('span').css('display', 'none');
+                $(this).find(MOTIF_CLASSES.ADD_TAG).find('span, svg').css('display', 'none');
+                $(this).find(MOTIF_CLASSES.DELETE_CONTAINER).css('display', 'none');
+              });
 
               $(elem).find(MOTIF_CLASSES.DELETE_CONTAINER).on("hover", function() {
                 $(this).find(MOTIF_CLASSES.DELETE).hover();
@@ -87,7 +99,7 @@ class UserInterface {
               return elem;
             });
 
-            $(MOTIF_CLASSES.TAGLIST).css('opacity', '1')
+            $(MOTIF_CLASSES.TAGLIST).css('opacity', '1');
             spotifyUITracks.css('opacity', '1');
 
             $(MOTIF_CLASSES.ADD_TAG).on("click", function() {
