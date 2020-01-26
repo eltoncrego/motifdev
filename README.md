@@ -1,5 +1,5 @@
 # Motif
-Motif is a chrome extension we build to help Spotify users organize their music library based on various moods, genres, grouping, or generally whatever category you can come up with. The intent is to add a tagging and search system that, by adding tags to the songs you listen to, you'll be able to generate playlists easily based on your listening preferences at the time.
+Motif is a chrome extension we built to help Spotify users organize their music library based on various moods, genres, grouping, or generally whatever category you can come up with. The intent is to add a tagging and search system that, by adding tags to the songs you listen to, you'll be able to generate playlists easily based on your listening preferences at the time.
 
 ## Getting Started
 We haven't published this extension to the chrome web store yet, but if you want to get it running and play around with it, you'll have to load the extension in yourself. We've provided instructions on how to do this in the readme at the extension folder level in this repo.
